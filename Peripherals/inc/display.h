@@ -299,8 +299,8 @@
 	
 #define		QD_zhengxiang		1
 #define		QD_fanxiang			0
-#define 	SMG_seg_QD  		QD_zhengxiang		
-#define 	SMG_bit_QD  		QD_fanxiang	 
+#define 	SMG_seg_QD  		QD_zhengxiang		/*正向代表，高电有效*/
+#define 	SMG_bit_QD  		QD_zhengxiang	 	/**/
 
 #if SMG_bit_QD
 	#define SMG_data_bit1  BIT0
@@ -361,7 +361,7 @@
 	#define SMG_seg_Data_f			0x4e	//20170715
 	#define SMG_seg_Data_t			0x47  //20170715
 	#define SMG_seg_Data_L			0x07	//20170715
-	#define SMG_seg_Data_I			0x39	//20170715
+	#define SMG_seg_Data_I			0x0b  //20170905  //0x39	//20170715  
 	#define SMG_seg_Data_r			0x0e	//20170715
 
 	/*单独某段显示*/
@@ -461,15 +461,24 @@ extern unsigned char SMG_data_Decode_table[1][SMG_bit_sum];
 extern int SMG_D9_Decode_table;
 /***************************************************************************/
 /*外部定义函数声明*/
-
+/*显示模式1-Detect-HI*/
+void SMG_DisplayModeONE_Detect_AREA_HI(int16_t OneSecondTime, int16_t HI_Value, int16_t ADCvalue);
+/*显示模式1-Detect-LO*/
+void SMG_DisplayModeONE_Detect_AREA_LO(int16_t OneSecondTime, int16_t LO_Value, int16_t ADCvalue);
 /*显示模式1*/
 void SMG_DisplayModeONE(int16_t Threshold,int16_t ADCvalue);
 /*显示模式2*/
 void SMG_DisplayModeTWO(int16_t RegisterB);
 /*显示模式3*/
 void SMG_DisplayModeTHIRD(int16_t CPV_counter);
-/*功能菜单-1*/
-void SMG_DisplayMenuOne(uint32_t CSV_counter);
+/*功能菜单-SV*/
+void SMG_DisplaSV(uint32_t SV_counter);
+/*功能菜单-FSV*/
+void SMG_DisplayFSV(uint32_t FSV_counter);
+/*功能菜单-FSV*/
+void SMG_DisplayFSV(uint32_t FSV_counter);
+/*显示模式DETECT*/
+void SMG_DisplayModeDETECT(int16_t DETECT);
 /*功能菜单-2-1,TOFF*/
 void SMG_DisplayMenuTwo_TOFF(void);
 /*功能菜单-2-2,OFFD*/
@@ -484,15 +493,23 @@ void SMG_DisplayMenuTwo_ON_Delay_SET(int16_t ON_DELAY,uint8_t BlinkONOFF);
 void SMG_DisplayMenuTwo_SHOT(void);
 /*功能菜单-2-4-1,SHOT设定菜单*/
 void SMG_DisplayMenuTwo_SHOT_SET(int16_t SHOT,uint8_t BlinkONOFF);
+/*功能菜单-2-5,DEL*/
+void SMG_DisplayMenuTwo_DEL(void);
+/*功能菜单-2-5-1,SHOT设定菜单*/
+void SMG_DisplayMenuTwo_DEL_SET(int16_t DEL,uint8_t BlinkONOFF);
+
 /*SET-step-1模式菜单*/
 void SMG_DisplaySET_Step_1_Mode(int16_t modeflag,uint32_t ADCINvalue);
 /*SET-step-2模式菜单*/
 void SMG_DisplaySET_Step_2_Mode(int16_t modeflag,uint32_t ADCINvalue,uint32_t ADCMAX);
 /*OUT1,OUT2状态显示*/
-void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS);
+void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS,uint8_t OUT3_STATUS);
 /*END界面*/
-void ENDDisplay(void);
-	
+void END_Display(void);
+
+/*ATT100  菜单*/
+void SMG_DisplayATT100(int16_t ATT100Value,uint32_t ADCValue);
+
 /*按键复用显示*/
 void ButtonMappingDisplay(uint8_t MappingFlag);
 
@@ -508,6 +525,7 @@ void SMG_D4_to_D1_Display(void);
 void SMG_D8_to_D5_Display(void);
 void SMG_D9_Display(void);
 void SMG_Diplay(void);
+void takeoffLED(void);
 #ifdef __cplusplus
 }
 #endif

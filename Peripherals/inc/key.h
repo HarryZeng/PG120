@@ -27,11 +27,11 @@
 #include 	"stdint.h"
 	 
 	 
-#define KEY_LEVEL_1   		6000
-#define KEY_LEVEL_1_SET   20	 
+#define KEY_LEVEL_1   		1400
+#define KEY_LEVEL_1_SET   5
 	 
-#define KEY_LEVEL_2   		12000
-#define KEY_LEVEL_2_SET   10
+#define KEY_LEVEL_2   		1600
+#define KEY_LEVEL_2_SET   5
 
 #define KEY_LEVEL_3   		10
 #define KEY_LEVEL_3_SET   2 

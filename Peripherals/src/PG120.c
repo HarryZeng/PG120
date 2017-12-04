@@ -31,16 +31,21 @@ uint16_t DEL = 4;
 int16_t HI = 1000;
 int16_t LO = 700;
 bool timeflag = 0;
+uint8_t LastRegisterA=0;
 uint8_t RegisterA=0;
 uint8_t RegisterB=1;
 uint8_t OUT1=0;
 uint8_t OUT2=0;
+uint8_t OUT3=0;
 int16_t OUT2_TimerCounter=0;
 uint16_t OUT2_Timer=0;
+int16_t 	OUT3_TimerCounter=0;
+uint16_t OUT3_Timer=0;
 uint32_t ADCValue=0;
 uint32_t ADC_Display=0;
 int32_t DACOUT = 1000;
 uint32_t CPV = 0;
+
 Button_STATUS KEY=ULOC;
 uint8_t 		ConfirmShortCircuit=0;
 uint32_t   	ShortCircuitCounter = 0;
@@ -60,6 +65,7 @@ void DisplayModeFour(void);
 void ShortCircuitProtection(void);
 void SetOUT1Status(void);
 void SetOUT2Status(void);
+void SetOUT3Status(void);
 void ButtonMapping(void);
 void DEL_Set(void);
 void DisplayModeONE_STD(void);
@@ -68,7 +74,8 @@ void ResetParameter(void);
 void Test_Delay(uint32_t ms);
 uint32_t ADCDispalyProcess(uint32_t *ADC_RowValue,uint16_t Length);
 
-
+extern uint16_t FSV;
+extern int32_t SV;
 extern uint8_t SelftStudyflag;
 /*----------------------------------宏定义-------------------------------------*/
 
@@ -152,12 +159,28 @@ void ClearData(uint32_t *ary,uint8_t Length)
 		}
 }
 
-/**/
-void GetDXValue(uint8_t RegisterAStatus)
+/*记录CPV并设置OUT的输出*/
+void CPV_SET_OUT(void)
 {
-	
-	
+		if(LastRegisterA==0&&RegisterA==1)
+		{
+			CPV++;
+			if(CPV>=SV) /*如果计数器达到预先设定的CSV，清零，OUT2输出一个高电平*/
+			{
+				OUT2 = 1;
+				CPV = 0;
+			}
+			if(CPV>=FSV) /*如果计数器达到预先设定的CSV，清零，OUT2输出一个高电平*/
+			{
+				OUT3 = 1;
+				CPV = 0;
+			}
+		}
+		LastRegisterA = RegisterA;
+		/*显示OUT1和OUT2的状态*/
+		SMG_DisplayOUT_STATUS(OUT1,OUT2,OUT3);
 }
+
 
 uint8_t PWMCounter=0;
 void DMA1_Channel1_IRQHandler(void)
@@ -175,7 +198,7 @@ void DMA1_Channel1_IRQHandler(void)
 		GetSum(&SX[S_Index++],S,4);/*四个通道总和*/
 		S_Flag = 1;
 		if(S_Index>3)	
-		{		
+		{
 				S_Index = 0;
 				SX_Final[SX_Index] = DeleteMaxAndMinGetAverage(SX,4);/*去掉最大最小值，求剩下数据的平均值,需要求32组*/
 				S_Final = SX_Final[SX_Index];	/*获得最终信号值*/
@@ -185,6 +208,8 @@ void DMA1_Channel1_IRQHandler(void)
 					SetRegisterA(S_Final);/*判断RegisterA的状态*/
 				if(PWMCounter>80)
 					SetOUT1Status();/*大于等于50个PWM脉冲，才开始设置OUT输出*/
+				/*根据CPV，设置OUT输出*/
+				CPV_SET_OUT();
 				/*累计32组数据*/
 				SX_Index++;
 				if(SX_Index>32)
@@ -210,24 +235,8 @@ void DMA1_Channel1_IRQHandler(void)
 						if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/  
 							Min_DX = DX;
 					}
-
-					//ClearData(SX_Final,32);/*清零*/
 				}
-				//SelftStudyflag
-				/**/
-//				if(S_Final>=S1024-70)
-//				{
-//					S1024_Index++;
-//					S1024_Total+=S_Final;
-//					if(S1024_Index>1024)
-//					{
-//						S1024_Index = 0;
-//						S1024 = S1024_Total/S1024_Index;/*求得新的S1024*/
-//						S1024_Threshold = S1024-DX;			/*正常工作室自动调整获得的阀值*/
-//						S1024_Flag = 1;
-//					}
-//				}
-				
+
 				if(S_Final>=9999) S_Final=9999;
 				if(S_Final<=0) S_Final=0;
 		}
@@ -300,6 +309,7 @@ void PG120_Function(void)
 				{
 						GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,Bit_RESET);
 						GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,Bit_RESET);/*马上拉低OUT*/ /*发现短路，将OUT引脚拉低*/
+						GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*马上拉低OUT*/ /*发现短路，将OUT引脚拉低*/
 						if((ShortCircuitLastTime - ShortCircuitTimer)>=20000)
 						{
 								ConfirmShortCircuit = 0;
@@ -313,6 +323,11 @@ void PG120_Function(void)
 			
 				/*按键复用*/
 				ButtonMapping();
+				
+				/*OUT2输出*/
+//				SetOUT2Status();
+//				/*OUT3输出*/
+//				SetOUT3Status();
 				
 				if(KEY==ULOC)/*判断按键是否上锁*/
 				{
@@ -471,11 +486,11 @@ void DisplayModeONE_STD(void)
 				if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
 					Threshold = Threshold+1;
 			}
-			else 
-			{
-				if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
-					Threshold = Threshold+1;
-			}
+//			else 
+//			{
+//				if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
+//					Threshold = Threshold+1;
+//			}
 		}	
 		else
 		{
@@ -500,11 +515,11 @@ void DisplayModeONE_STD(void)
 				if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
 					Threshold = Threshold-1;
 			}
-			else 
-			{
-				if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
-					Threshold = Threshold-1;
-			}
+//			else 
+//			{
+//				if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
+//					Threshold = Threshold-1;
+//			}
 		}
 		else
 		{
@@ -966,14 +981,34 @@ void SetOUT2Status(void)
 		if(OUT2)
 		{
 			GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,Bit_SET);/*拉高*/
-			//GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,Bit_SET);
 		}
-	 if(OUT2_TimerCounter >=250)
+	 if(OUT2_TimerCounter >=667)
 		{
 			OUT2 = 0;
 			OUT2_TimerCounter = 0;  /*获取当前时间*/
-			//GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,Bit_RESET);
 			GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,Bit_RESET);/*80ms后拉低*/
+		}
+	}
+}
+
+/*******************************
+*
+*判断OUT3的输出状态
+*
+*******************************/
+void SetOUT3Status(void)
+{
+	if(ShortCircuit!=1)/*不是短路保护的情况下才判断OUT2的输出*/
+	{
+		if(OUT3)
+		{
+			GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_SET);/*拉高*/
+		}
+	 if(OUT3_TimerCounter >=667)
+		{
+			OUT3 = 0;
+			OUT3_TimerCounter = 0;  /*获取当前时间*/
+			GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*80ms后拉低*/
 		}
 	}
 }
@@ -1007,6 +1042,7 @@ void ShortCircuitProtection(void)
 		ConfirmShortCircuit=1;
 		GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,Bit_RESET);
 		GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,Bit_RESET);/*马上拉低OUT*/
+		GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*马上拉低OUT*/
 		ShortCircuitTimer = ShortCircuitLastTime;
 	}	
 }

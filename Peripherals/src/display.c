@@ -967,17 +967,20 @@ void SMG_DisplaySET_Step_2_Mode(int16_t modeflag,uint32_t ADCINvalue,uint32_t Ne
 		}
 }
 
-/*OUT1,OUT2状态显示*/
-void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS)
+/*OUT1,OUT2,OUT3状态显示*/
+void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS,uint8_t OUT3_STATUS)
 { 
 		OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);
-		if(OUT1_STATUS==0 && OUT2_STATUS==1)
-			SMG_data_Decode_table[0][8]=data_SMG_seg_table[33]|data_SMG_seg_table[34];						//D1	e,f seg	
-		else if(OUT1_STATUS==1 && OUT2_STATUS==0)
-			SMG_data_Decode_table[0][8]=data_SMG_seg_table[30]|data_SMG_seg_table[31];						//D1	b,c seg
-		else if(OUT1_STATUS==1 && OUT1_STATUS==1)
+
+		if(OUT1_STATUS==1 && OUT2_STATUS==0&&OUT3_STATUS==0)
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[33]|data_SMG_seg_table[34];						//D1	33->e,3->f seg	
+		else if(OUT1_STATUS==0 && OUT2_STATUS==1&&OUT3_STATUS==0)
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[30];						//D1	30->b seg
+		else if(OUT1_STATUS==0 && OUT2_STATUS==0&&OUT3_STATUS==1)
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[31];						//D1	31->c seg
+		else if(OUT1_STATUS==1 && OUT1_STATUS==1 && OUT3_STATUS==1)
 		{
-			SMG_data_Decode_table[0][8]=data_SMG_seg_table[30]|data_SMG_seg_table[31]|data_SMG_seg_table[33]|data_SMG_seg_table[34];//OUT1，OUT2同时亮
+			SMG_data_Decode_table[0][8]=data_SMG_seg_table[30]|data_SMG_seg_table[31]|data_SMG_seg_table[33]|data_SMG_seg_table[34];//OUT1，OUT2,OUT3同时亮
 		}
 		else
 		{
@@ -1037,13 +1040,13 @@ void SMG_DisplayATT100(int16_t ATT100Value,uint32_t ADCValue)
 			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
 		
 		/*ATT100*/
-		k_ADC_counter = GetIntNumber(ATT100Value);
+		k_ATT_Counter = GetIntNumber(ATT100Value);
 		SMG_data_Decode_table[0][4]=data_SMG_seg_table[ATT100Value%10];								//D5
-		if(k_ADC_counter>=2)
+		if(k_ATT_Counter>=2)
 			SMG_data_Decode_table[0][5]=data_SMG_seg_table[(ATT100Value/10)%10];				//D6
 		else
 			SMG_data_Decode_table[0][5]=data_SMG_seg_table[22];													//none
-		if(k_ADC_counter>=3)
+		if(k_ATT_Counter>=3)
 			SMG_data_Decode_table[0][6]=data_SMG_seg_table[(ATT100Value/100)%10];				//D7
 		else
 			SMG_data_Decode_table[0][6]=data_SMG_seg_table[22];													//none

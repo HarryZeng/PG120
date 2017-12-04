@@ -29,12 +29,11 @@ extern uint8_t  	EventFlag;
 extern uint8_t 	ShortCircuit;
 extern uint8_t 	ShortCircuitTimer;
 extern int16_t OUT2_TimerCounter;
-
+extern int16_t OUT3_TimerCounter;
+extern uint8_t OUT3;
 extern uint8_t OUT2;
 extern uint8_t OUT1;
 extern uint32_t CPV;
-
-uint8_t LastRegisterA=0;
 
 void timer_init(void);
 void GPIO_Config(void);
@@ -107,6 +106,8 @@ void TIM3_IRQHandler(void)
 					//GPIOB->ODR ^= GPIO_Pin_8;
 					if(OUT2)
 						OUT2_TimerCounter++;
+					if(OUT3)
+						OUT3_TimerCounter++;
 					
 					SMG_Diplay();
 					ShortCircuitLastTime++;				
