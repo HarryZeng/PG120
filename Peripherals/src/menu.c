@@ -123,7 +123,8 @@ void menu(void)
 							WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
 							WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
 							WriteFlash(SV_FLASH_DATA_ADDRESS,SV);
-
+							WriteFlash(ATT100_FLASH_DATA_ADDRESS,ATT100);
+							WriteFlash(FSV_FLASH_DATA_ADDRESS,FSV);
 							break;
 						}
 				}

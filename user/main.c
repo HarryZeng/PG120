@@ -153,7 +153,10 @@ void ProgramCheck(void)
 {
 	ProgramCounter 		= ReadFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS);
 	if(ProgramCounter>65535 || ProgramCounter<0)
+	{
 		ProgramCounter = 0;
+		ResetParameter();
+	}
 	ProgramCounter = ProgramCounter+1;
 	WriteFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS,ProgramCounter);
 	DelaymsSet(50); 	
@@ -188,7 +191,7 @@ int main(void)
 	
 		CheckFLag = FlashCheck();
 	
-		if(1)
+		if(CheckFLag)
 		{
 			/*程序运行次数检测*/
 			ProgramCheck();

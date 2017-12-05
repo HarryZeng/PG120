@@ -74,6 +74,7 @@ void ResetParameter(void);
 void Test_Delay(uint32_t ms);
 uint32_t ADCDispalyProcess(uint32_t *ADC_RowValue,uint16_t Length);
 
+extern int16_t ATT100;
 extern uint16_t FSV;
 extern int32_t SV;
 extern uint8_t SelftStudyflag;
@@ -854,7 +855,7 @@ void DEL_Set(void)
 			}
 			if(LastDEL!=DEL && DownButton.Status==Release && UpButton.Status==Release)
 			{
-				WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
+				//WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
 			}
 			if(DEL>=500)
 				DEL = 500;
@@ -1166,22 +1167,14 @@ void GetEEPROM(void)
 			OUT1_Mode.DelayValue 	= ReadFlash(OUT1_Value_FLASH_DATA_ADDRESS);
 			SV 										= ReadFlash(SV_FLASH_DATA_ADDRESS);
 			Threshold 						= ReadFlash(Threshold_FLASH_DATA_ADDRESS);
-			DACOUT 								= ReadFlash(DACOUT_FLASH_DATA_ADDRESS);
+			ATT100 								= ReadFlash(ATT100_FLASH_DATA_ADDRESS);
 			KEY 									= ReadFlash(KEY_FLASH_DATA_ADDRESS);
 			RegisterB 						= ReadFlash(RegisterB_FLASH_DATA_ADDRESS);
-			DEL 									= ReadFlash(DEL_FLASH_DATA_ADDRESS);
+			FSV 									= ReadFlash(FSV_FLASH_DATA_ADDRESS);
 			HI 										= ReadFlash(HI_FLASH_DATA_ADDRESS);
 			LO 										= ReadFlash(LO_FLASH_DATA_ADDRESS);
 			displayModeONE_FLAG 	= ReadFlash(DETECT_FLASH_DATA_ADDRESS);
-	
-	
-		//ProgramRUNcounter++;
-		//保存程序运行次数
-		//WriteFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS,ProgramRUNcounter);
-
-//		DAC_SetChannel1Data(DAC_Align_12b_R,(uint16_t)DACOUT);
-//		DAC_SoftwareTriggerCmd(DAC_Channel_1,ENABLE);
-		
+			
 }
 
 /*****************************
@@ -1196,7 +1189,7 @@ void ResetParameter(void)
 		KEY = ULOC;
 		OUT1_Mode.DelayMode = TOFF;
 		OUT1_Mode.DelayValue = 10;
-		DACOUT = 1000;
+		ATT100 = 100;
 		DEL = 4;
 		RegisterB = 1;
 		HI = 1000;
@@ -1211,13 +1204,13 @@ void ResetParameter(void)
 		Test_Delay(50); 
 		WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
 		Test_Delay(50); 
-		WriteFlash(DACOUT_FLASH_DATA_ADDRESS,DACOUT);
+		WriteFlash(ATT100_FLASH_DATA_ADDRESS,DACOUT);
 		Test_Delay(50); 
 		WriteFlash(KEY_FLASH_DATA_ADDRESS,KEY);
 		Test_Delay(50); 
 		WriteFlash(RegisterB_FLASH_DATA_ADDRESS,RegisterB);
 		Test_Delay(50); 
-		WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
+		WriteFlash(FSV_FLASH_DATA_ADDRESS,DEL);
 		Test_Delay(50); 
 		WriteFlash(HI_FLASH_DATA_ADDRESS,HI);
 		Test_Delay(50); 
