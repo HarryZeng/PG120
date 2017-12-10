@@ -36,8 +36,8 @@ void MenuTwo_OUT1_TOFF(void);
 void MenuTwo_OUT1_OFFD(void);
 void MenuTwo_OUT1_ON_D(void);	
 void MenuTwo_OUT1_SHOT(void);
-
 extern uint8_t  displayModeONE_FLAG;
+extern uint32_t tempPress;
 void menu(void)
 {
 	static uint8_t lastCounter;
@@ -153,18 +153,27 @@ void MenuOne_ATT100(void)
 		UpButton.PressCounter = 0;
 		if(UpButton.PressTimer<KEY_LEVEL_1)
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
 				ATT100 = ATT100+1;
+			}
 		}
 		else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<KEY_LEVEL_2)
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
 				ATT100 = ATT100+1;
+			}
 		}
 		else 
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
 				ATT100 = ATT100+1;
+			}
 		}
 	}	
 	else
@@ -183,18 +192,27 @@ void MenuOne_ATT100(void)
 		DownButton.PressCounter = 0;
 		if(DownButton.PressTimer<KEY_LEVEL_1)
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
 				ATT100 = ATT100-1;
+			}
 		}
 		else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
 				ATT100 = ATT100-1;
+			}
 		}
 		else 
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
 				ATT100 = ATT100-1;
+			}
 		}
 	}	
 	else
@@ -233,18 +251,27 @@ void MenuOne_SV(void)
 		UpButton.PressCounter = 0;
 		if(UpButton.PressTimer<KEY_LEVEL_1)
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				SV = SV+1;
+			}
 		}
 		else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<KEY_LEVEL_2)
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				SV = SV+1;
+			}
 		}
 		else 
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				SV = SV+1;
+			}
 		}
 	}	
 	else
@@ -263,18 +290,27 @@ void MenuOne_SV(void)
 		DownButton.PressCounter = 0;
 		if(DownButton.PressTimer<KEY_LEVEL_1)
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				SV = SV-1;
+			}
 		}
 		else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				SV = SV-1;
+			}
 		}
 		else 
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				SV = SV-1;
+			}
 		}
 	}	
 	else
@@ -308,18 +344,27 @@ void MenuOne_FSV(void)
 		UpButton.PressCounter = 0;
 		if(UpButton.PressTimer<KEY_LEVEL_1)
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				FSV = FSV+1;
+			}
 		}
 		else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<KEY_LEVEL_2)
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				FSV = FSV+1;
+			}
 		}
 		else 
 		{
-			if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
+			if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				FSV = FSV+1;
+			}
 		}
 	}	
 	else
@@ -338,18 +383,27 @@ void MenuOne_FSV(void)
 		DownButton.PressCounter = 0;
 		if(DownButton.PressTimer<KEY_LEVEL_1)
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				FSV = FSV-1;
+			}
 		}
 		else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				FSV = FSV-1;
+			}
 		}
 		else 
 		{
-			if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
+			if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;	
 				FSV = FSV-1;
+			}
 		}
 	}	
 	else

@@ -16,10 +16,10 @@
 #include "PG120.h"
 #include "key.h"
 
-#define timer_period 24 //ms
-#define shortKEY 	50
-#define middleKEY	100
-#define longKEY		150
+#define timer_period 12 //ms
+#define shortKEY 	100
+#define middleKEY	1000
+#define longKEY		3000
 #define SCAN_TIMER  htim3
 
 //uint32_t key_counter;
@@ -43,7 +43,7 @@ void Button_Init(void)
 	SetButton.WorkIn = WorkHigh;
 	SetButton.Effect = PressNOEffect;
 	SetButton.ShortTime = 1*timer_period;
-	SetButton.LongTime = 15*timer_period;   
+	SetButton.LongTime = 10*timer_period;   
  
 	ModeButton.ButtonPort = BUTTON_MODE_GPIO_Port;
 	ModeButton.ButtonPin = BUTTON_MODE_Pin;
@@ -54,7 +54,7 @@ void Button_Init(void)
 	ModeButton.WorkIn = WorkHigh;
 	ModeButton.Effect = PressNOEffect;
 	ModeButton.ShortTime = 1*timer_period;  
-	ModeButton.LongTime = 15*timer_period;		
+	ModeButton.LongTime = 10*timer_period;		
 	
 	UpButton.ButtonPort = BUTTON_UP_GPIO_Port;
 	UpButton.ButtonPin = BUTTON_UP_Pin;

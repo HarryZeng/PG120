@@ -457,10 +457,12 @@ void DisplayModeONE(void)
 *显示模式1_DETECT_STD
 *
 *******************************/
+uint32_t tempPress=0;
 void DisplayModeONE_STD(void)
 {
 	static uint8_t lastCounter;
 	static int16_t LastThreshold;
+	
 		/*数码管显示*/
 		SMG_DisplayModeONE(Threshold,ADC_Display);
 	
@@ -479,19 +481,29 @@ void DisplayModeONE_STD(void)
 			UpButton.PressCounter = 0;
 			if(UpButton.PressTimer<=KEY_LEVEL_1)
 			{
-				if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
+				
+				if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+				{
 					Threshold = Threshold+1;
+					tempPress = 0;
+				}
 			}
 			else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<=KEY_LEVEL_2)
 			{
-				if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
+				if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+				{
+						tempPress = 0;
 					Threshold = Threshold+1;
+				}
 			}
-//			else 
-//			{
-//				if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
-//					Threshold = Threshold+1;
-//			}
+			else 
+			{
+				if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+				{
+						tempPress = 0;
+					Threshold = Threshold+1;
+				}
+			}
 		}	
 		else
 		{
@@ -508,19 +520,28 @@ void DisplayModeONE_STD(void)
 			DownButton.PressCounter = 0;
 			if(DownButton.PressTimer<KEY_LEVEL_1)
 			{
-				if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
+				if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+				{
 					Threshold = Threshold-1;
+					tempPress = 0;
+				}
 			}
 			else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 			{
-				if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
+				if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+				{
 					Threshold = Threshold-1;
+					tempPress = 0;
+				}
 			}
-//			else 
-//			{
-//				if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
-//					Threshold = Threshold-1;
-//			}
+			else 
+			{
+				if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+				{
+					tempPress = 0;
+					Threshold = Threshold-1;
+				}
+			}
 		}
 		else
 		{
@@ -570,18 +591,27 @@ void DisplayModeONE_AREA(void)
 						UpButton.PressCounter = 0;
 						if(UpButton.PressTimer<=KEY_LEVEL_1)
 						{
-							if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
+							if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
 								HI = HI+1;
+							}
 						}
 						else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<=KEY_LEVEL_2)
 						{
-							if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
+							if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
 								HI = HI+1;
+							}
 						}
 						else 
 						{
-							if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
+							if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
 								HI = HI+1;
+							}
 						}
 					if(HI>=4000)
 							HI = 4000;
@@ -606,18 +636,27 @@ void DisplayModeONE_AREA(void)
 						DownButton.PressCounter = 0;
 						if(DownButton.PressTimer<KEY_LEVEL_1)
 						{
-							if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
+							if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
 								HI = HI-1;
+							}
 						}
 						else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 						{
-							if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
+							if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
 								HI = HI-1;
+							}
 						}
 						else 
 						{
-							if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
+							if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
 								HI = HI-1;
+							}
 						}
 						if(HI<=100)
 							HI = 100;
@@ -654,18 +693,27 @@ void DisplayModeONE_AREA(void)
 						UpButton.PressCounter = 0;
 						if(UpButton.PressTimer<=KEY_LEVEL_1)
 						{
-							if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
-								LO = LO+1;
+							if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
+								LO = LO + 1;
+							}
 						}
 						else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<=KEY_LEVEL_2)
 						{
-							if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
-								LO = LO+1;
+							if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
+								LO = LO + 1;
+							}
 						}
 						else 
 						{
-							if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
-								LO = LO+1;
+							if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
+								LO = LO + 1;
+							}
 						}
 						SMG_DisplayModeONE_Detect_AREA_LO(1,LO,ADC_Display);/*显示阀值*/
 					}	
@@ -686,18 +734,27 @@ void DisplayModeONE_AREA(void)
 						DownButton.PressCounter = 0;
 						if(DownButton.PressTimer<KEY_LEVEL_1)
 						{
-							if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
-								LO = LO-1;
+							if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
+								LO = LO - 1;
+							}
 						}
 						else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 						{
-							if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
-								LO = LO-1;
+							if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
+								LO = LO - 1;
+							}
 						}
 						else 
 						{
-							if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
-								LO = LO-1;
+							if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+							{
+								tempPress = 0;
+								LO = LO - 1;
+							}
 						}
 						SMG_DisplayModeONE_Detect_AREA_LO(1,LO,ADC_Display);/*显示阀值*/
 					}

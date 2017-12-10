@@ -95,6 +95,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler()
 //	TIM_Cmd(TIM1, DISABLE);
 //}
 extern bool timeflag;
+extern uint32_t tempPress;
 void TIM3_IRQHandler(void)
 {
 	  if(TIM_GetITStatus(TIM3, TIM_IT_Update))            //判断发生update事件中断  
@@ -116,9 +117,10 @@ void TIM3_IRQHandler(void)
 					else
 						ShortCircuitCounter=0;
 				}
-				if(timenum%100==0)/*120us*200us=24000us*/
+				if(timenum%80==0)/*120us*100us=12000us*/
 				{
 					Key_Scan();									//定时扫描按键
+					tempPress=1;
 				}
 				if(timenum>=5000)	/*5000*10us = 500,000us = 500ms*/
 				{
@@ -191,7 +193,7 @@ int main(void)
 	
 		CheckFLag = FlashCheck();
 	
-		if(CheckFLag)
+		if(1)
 		{
 			/*程序运行次数检测*/
 			ProgramCheck();
