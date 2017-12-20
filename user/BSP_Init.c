@@ -53,7 +53,7 @@ void SMG_GPIO_INIT(void)
 
 		//GPIOD2~4
     GPIO_InitStructure.GPIO_Pin = D4_Pin;  
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;                 
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;             
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;                                 
     GPIO_Init(D4_GPIO_Port, &GPIO_InitStructure); 
 		GPIO_InitStructure.GPIO_Pin = D3_Pin;
@@ -198,7 +198,7 @@ void TIM2_init(void)
   
     GPIO_StructInit(&GPIO_InitStructure);  
     //GPIOA                                                         //PA-0~3 
-		GPIO_InitStructure.GPIO_Pin=GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3;
+		GPIO_InitStructure.GPIO_Pin=GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3; /*PWM ->PA0,ATT100->PA1,PWM1->PA2,PWM2->PA3*/
 		GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
 		GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
 		GPIO_Init(GPIOA,&GPIO_InitStructure);
@@ -211,7 +211,7 @@ void TIM2_init(void)
 		/*TIM2 Base Init*/
     TIM_DeInit(TIM2);                                               //复位TIM2  
     TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);                  //初始化TIM结构体  
-		TIM_TimeBaseStructure.TIM_Period=2048;                 //ARR??1920->30us,2048->32us
+		TIM_TimeBaseStructure.TIM_Period=2496;                 //ARR??1920->30us,2048->32us,2496->39us
 		TIM_TimeBaseStructure.TIM_Prescaler=0;
 		TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
 		TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; 
@@ -223,28 +223,29 @@ void TIM2_init(void)
 		TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;                                
 		TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;         
 		TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
-		TIM_OCInitStructure.TIM_Pulse = 1500;                                                         
+		TIM_OCInitStructure.TIM_Pulse = 96;                                  	//PWM      96->1.5us                
 		TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;                 
 		TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_Low;     
 		TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
 		TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Reset;  
 		TIM_OC1Init(TIM2,&TIM_OCInitStructure);                                                 
 		TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);	
-	
-		TIM_OCInitStructure.TIM_Pulse = 960;                                                         
+		
+		TIM_OCInitStructure.TIM_Pulse = 960;                                   //ATT100	                
 		TIM_OC2Init(TIM2,&TIM_OCInitStructure);                                                
 		TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);	
 	
-		TIM_OCInitStructure.TIM_Pulse = 600;                                                         
+		TIM_OCInitStructure.TIM_Pulse = 256;                                   //PWM1     256->4us      
 		TIM_OC3Init(TIM2,&TIM_OCInitStructure);                                                 
 		TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);	
 	
-		TIM_OCInitStructure.TIM_Pulse = 242;                                                        
+		TIM_OCInitStructure.TIM_Pulse = 109;                                   //PWM2    109->1.7us    
 		TIM_OC4Init(TIM2,&TIM_OCInitStructure);                                                 
 		TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);	
 		
-    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);                      //使能TIM2中断
-
+    //TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);                      //使能TIM2中断
+		TIM_ITConfig(TIM2, TIM_IT_CC4 , ENABLE);
+		
 		TIM_Cmd(TIM2, ENABLE);
 		
 		TIM_CtrlPWMOutputs(TIM2,ENABLE);
@@ -404,7 +405,8 @@ void ADC1_Init(void)
   ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
   ADC_InitStructure.ADC_ScanConvMode = ENABLE;
   ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
-  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T2_CC2;
+  //ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T2_CC2;
+	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;  /*使用软件触发*/
   ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
   ADC_InitStructure.ADC_NbrOfChannel = 4;
   ADC_Init(ADC1, &ADC_InitStructure);

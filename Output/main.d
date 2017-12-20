@@ -16,10 +16,9 @@
 ..\output\main.o: ..\Peripherals\inc\display.h
 ..\output\main.o: ..\Peripherals\inc\main.h
 ..\output\main.o: ..\Peripherals\inc\menu.h
+..\output\main.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_adc.h
 ..\output\main.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_tim.h
 ..\output\main.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h
-..\output\main.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dac.h
-..\output\main.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_exti.h
 ..\output\main.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_iwdg.h
 ..\output\main.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_pwr.h
 ..\output\main.o: bsp_init.h

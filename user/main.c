@@ -4,10 +4,11 @@
 #include "stdio.h"
 #include "display.h"
 #include "menu.h"
+#include "stm32f10x_adc.h"
 #include "stm32f10x_tim.h"
 #include "stm32f10x_flash.h"
-#include "stm32f10x_dac.h"
-#include "stm32f10x_exti.h"
+//#include "stm32f10x_dac.h"
+//#include "stm32f10x_exti.h"
 #include "stm32f10x_iwdg.h"
 #include "stm32f10x_pwr.h"
 #include "bsp_init.h"
@@ -68,7 +69,15 @@ void TIM2_IRQHandler()
     if(TIM_GetITStatus(TIM2, TIM_FLAG_Update))            //判断发生update事件中断  
     {  
         TIM_ClearITPendingBit(TIM2, TIM_FLAG_Update);     //清除update事件中断标志
+					
     }  
+		
+		if (TIM_GetITStatus(TIM2, TIM_IT_CC4) != RESET) 
+		{
+				TIM_ClearITPendingBit(TIM2, TIM_IT_CC4);
+				ADC_SoftwareStartConvCmd(ADC1, ENABLE);		//使能指定的ADC1的软件转换启动功能	
+				//GPIO_WriteBit(GPIOA, GPIO_Pin_10, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_10)));
+		}
 }  
 
 void TIM1_BRK_UP_TRG_COM_IRQHandler()  

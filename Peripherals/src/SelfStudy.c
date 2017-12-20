@@ -254,17 +254,18 @@ extern uint32_t 	S_Final;
 uint16_t ATT=600;  //默认600
 
 /*
-	5.125us    	30us
+	6us    	37us
 
-	328					1920
-	1						100
-公式转换得出约为：y=2x+254
+		y							x
+	384			->			1
+	2368		->			100
+公式转换得出约为：y=20x+364
 */
 void ATTSet(uint16_t ATTvalue)
 {
 	uint16_t TimerValue=0;
 	
-	TimerValue=16*ATTvalue+311;
+	TimerValue=20*ATTvalue+364;
 	
 	TIM_SetCompare2(TIM2,TimerValue);
 	
