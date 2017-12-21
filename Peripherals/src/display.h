@@ -506,7 +506,8 @@ void SMG_DisplaySET_Step_2_Mode(int16_t modeflag,uint32_t ADCINvalue,uint32_t AD
 void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS,uint8_t OUT3_STATUS);
 /*END界面*/
 void END_Display(void);
-
+/*DUST界面*/
+void Dust_Display(void);
 /*ATT100  菜单*/
 void SMG_DisplayATT100(int16_t ATT100Value,uint32_t ADCValue);
 

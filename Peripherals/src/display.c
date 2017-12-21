@@ -1001,9 +1001,21 @@ void END_Display(void)
 		SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];
 }
 
+/*DUST 显示菜单*/
+void Dust_Display(void)
+{
+		SMG_data_Decode_table[0][0]=data_SMG_seg_table[21]; //T
+		SMG_data_Decode_table[0][1]=data_SMG_seg_table[20];	//S
+		SMG_data_Decode_table[0][2]=data_SMG_seg_table[39];	//U
+		SMG_data_Decode_table[0][3]=data_SMG_seg_table[13];	//D
+		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];
+		SMG_data_Decode_table[0][5]=data_SMG_seg_table[22];
+		SMG_data_Decode_table[0][6]=data_SMG_seg_table[22];
+		SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];
+}
+
 void ParameterDisplay(void)
 {
-			/*测试码，BIT1到BIT8显示1到8的数字*/
 		SMG_data_Decode_table[0][0]=data_SMG_seg_table[21];
 		SMG_data_Decode_table[0][1]=data_SMG_seg_table[27];
 		SMG_data_Decode_table[0][2]=data_SMG_seg_table[18];

@@ -73,12 +73,15 @@ void DisplayModeONE_AREA(void);
 void ResetParameter(void);
 void Test_Delay(uint32_t ms);
 uint32_t ADCDispalyProcess(uint32_t *ADC_RowValue,uint16_t Length);
+uint8_t CheckDust(void);
 
 extern int16_t ATT100;
 extern uint16_t FSV;
 extern int32_t SV;
 extern uint8_t SelftStudyflag;
 /*----------------------------------宏定义-------------------------------------*/
+
+uint8_t DustFlag=0;
 
 uint32_t 	S[4];
 uint8_t 	S_Index=0;
@@ -88,6 +91,7 @@ uint32_t 	SX[4];
 uint32_t 	SX_Final[32];
 uint8_t 	SX_Flag;
 uint8_t 	SX_Index=0;
+
 
 uint32_t 	S_Final=0; /*S-SET*/
 uint8_t 	S_Final_FinishFlag=0;
@@ -107,27 +111,27 @@ int16_t 	Min_DX=0;
 
 
 /*去除最大最小值后剩下的数据求平均*/
-uint32_t DeleteMaxAndMinGetAverage(uint32_t *ary,uint8_t Length)
+uint32_t DeleteMaxAndMinGetAverage(uint32_t *ary,uint8_t Length,uint32_t *Max,uint32_t *Min)
 {
 		int j;
-		uint32_t	Max=0,Min=0,Sum=0;
-		Max = ary[0];
-		Min = ary[0];
+		uint32_t Sum=0;
+		*Max = ary[0];
+		*Min = ary[0];
 
     for (j=1; j<Length; j++)
     {
-        if (Max<ary[j])
-            Max = ary[j];
+        if (*Max<ary[j])
+            *Max = ary[j];
 
-        if (Min>ary[j])
-            Min = ary[j];
+        if (*Min>ary[j])
+            *Min = ary[j];
 		}
 		
 		for (j=0; j<Length; j++)
     {
 			Sum += ary[j];
 		}
-		return Sum/(Length-2);
+		return (Sum-*Max-*Min)/(Length-2);
 }
 /*求总和*/
 void GetSum(uint32_t *SUM,uint32_t *arry,uint8_t arryLength)
@@ -186,7 +190,8 @@ void CPV_SET_OUT(void)
 uint8_t PWMCounter=0;
 void DMA1_Channel1_IRQHandler(void)
 {
-	uint32_t S_Temp;
+	uint32_t 	SX_Max=0;
+	uint32_t 	SX_Min=0;
  	/*判断DMA传输完成中断*/ 
 	if(DMA_GetITStatus(DMA1_IT_TC1) != RESET)                        
 	{ 
@@ -201,9 +206,10 @@ void DMA1_Channel1_IRQHandler(void)
 		if(S_Index>3)	
 		{
 				S_Index = 0;
-				SX_Final[SX_Index] = DeleteMaxAndMinGetAverage(SX,4);/*去掉最大最小值，求剩下数据的平均值,需要求32组*/
+				SX_Final[SX_Index] = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min);/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*/
 				S_Final = SX_Final[SX_Index];	/*获得最终信号值*/
 				S_Final_FinishFlag = 1;
+				TX = (SX_Max-SX_Min)*1.5;  /*求得TX*/
 				ClearData(SX,4);/*清零*/
 				if(PWMCounter>50)/*大于等于50个PWM脉冲，才开始计算RegisterA*/
 					SetRegisterA(S_Final);/*判断RegisterA的状态*/
@@ -296,7 +302,15 @@ void PG120_Function(void)
 	GetEEPROM();
 	while(1)
 	{
-				/*正常显示*/
+		
+		if(DustFlag)
+		{
+			Dust_Display();
+			GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);/*一直将OUT1拉低*/
+		}
+		else
+		{
+					/*正常显示*/
 				if(SX_Flag)
 				{
 					SX_Flag = 0;
@@ -337,9 +351,22 @@ void PG120_Function(void)
 				/*Mode菜单模式*/
 					menu();
 				}
+		}
 	}
 }
 
+/*********************************
+灰层积聚严重，DUST
+**********************************/
+uint8_t CheckDust(void)
+{
+	if(DX>(S32/2))
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
 
 /*******************************
 *
@@ -941,7 +968,7 @@ void SetRegisterA(uint32_t GetADCValue)
 			RegisterA = 1;
 		else if(GetADCValue<=(Threshold-DX-TX-Threshold/128-10))/*20171201*/
 			RegisterA = 0;
-	}	
+	}
 }
 
 
@@ -1205,7 +1232,6 @@ uint32_t ProgramRUNcounter=0;
 
 void GetEEPROM(void)
 {
-		uint8_t tempKEY=0;
 		
 //			//OUT1_Mode.DelayMode 	= *(__IO uint32_t*)(OUT1_Mode_FLASH_DATA_ADDRESS);
 //			OUT1_Mode.DelayValue 	= *(__IO uint32_t*)(OUT1_Value_FLASH_DATA_ADDRESS);
@@ -1261,13 +1287,13 @@ void ResetParameter(void)
 		Test_Delay(50); 
 		WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
 		Test_Delay(50); 
-		WriteFlash(ATT100_FLASH_DATA_ADDRESS,DACOUT);
+		WriteFlash(ATT100_FLASH_DATA_ADDRESS,ATT100);
 		Test_Delay(50); 
 		WriteFlash(KEY_FLASH_DATA_ADDRESS,KEY);
 		Test_Delay(50); 
 		WriteFlash(RegisterB_FLASH_DATA_ADDRESS,RegisterB);
 		Test_Delay(50); 
-		WriteFlash(FSV_FLASH_DATA_ADDRESS,DEL);
+		WriteFlash(FSV_FLASH_DATA_ADDRESS,FSV);
 		Test_Delay(50); 
 		WriteFlash(HI_FLASH_DATA_ADDRESS,HI);
 		Test_Delay(50); 
