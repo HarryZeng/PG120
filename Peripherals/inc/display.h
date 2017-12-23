@@ -361,7 +361,7 @@
 	#define SMG_seg_Data_f			0x4e	//20170715
 	#define SMG_seg_Data_t			0x47  //20170715
 	#define SMG_seg_Data_L			0x07	//20170715
-	#define SMG_seg_Data_I			0x0b  //20170905  //0x39	//20170715  
+	#define SMG_seg_Data_I			0x02  //20171223  //0x39	//20170715  
 	#define SMG_seg_Data_r			0x0e	//20170715
 
 	/*单独某段显示*/
@@ -506,7 +506,8 @@ void SMG_DisplaySET_Step_2_Mode(int16_t modeflag,uint32_t ADCINvalue,uint32_t AD
 void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS,uint8_t OUT3_STATUS);
 /*END界面*/
 void END_Display(void);
-
+/*DUST界面*/
+void Dust_Display(void);
 /*ATT100  菜单*/
 void SMG_DisplayATT100(int16_t ATT100Value,uint32_t ADCValue);
 

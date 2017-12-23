@@ -251,21 +251,21 @@ void selfstudy(void)
 extern uint8_t S_Final_FinishFlag;
 extern uint32_t 	S[4];
 extern uint32_t 	S_Final;
-uint16_t ATT=600;  //默认600
+
 
 /*
-	6us    	37us
+	6us    	25us
 
 		y							x
 	384			->			1
-	2368		->			100
-公式转换得出约为：y=20x+364
+	1600		->			100
+公式转换得出约为：y=12x+372
 */
 void ATTSet(uint16_t ATTvalue)
 {
 	uint16_t TimerValue=0;
 	
-	TimerValue=20*ATTvalue+364;
+	TimerValue=12*ATTvalue+372;
 	
 	TIM_SetCompare2(TIM2,TimerValue);
 	

@@ -14,6 +14,6 @@
 ..\output\menu.o: ..\Peripherals\inc\main.h
 ..\output\menu.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 ..\output\menu.o: ..\Peripherals\inc\key.h
-..\output\menu.o: ..\Peripherals\src\display.h
+..\output\menu.o: ..\Peripherals\inc\display.h
 ..\output\menu.o: ..\Peripherals\inc\flash.h
 ..\output\menu.o: ..\Peripherals\inc\selfstudy.h

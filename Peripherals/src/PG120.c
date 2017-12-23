@@ -31,7 +31,7 @@ uint16_t DEL = 4;
 int16_t HI = 1000;
 int16_t LO = 700;
 bool timeflag = 0;
-uint8_t LastRegisterA=0;
+uint8_t LastOUT1=0;
 uint8_t RegisterA=0;
 uint8_t RegisterB=1;
 uint8_t OUT1=0;
@@ -103,12 +103,15 @@ uint32_t 	S_SET=0;
 uint32_t 	S_Selft=0;
 
 int16_t 	Threshold=1000;
-int16_t 	TX=0;
 
 int16_t 	DX=0;
 int16_t 	Last_DX=0;
 int16_t 	Min_DX=0;
 
+uint8_t 	TX_Index=0;
+uint32_t 	TX=0;
+uint32_t 	TX_Signal[6];
+int16_t 	FX=0;
 
 /*去除最大最小值后剩下的数据求平均*/
 uint32_t DeleteMaxAndMinGetAverage(uint32_t *ary,uint8_t Length,uint32_t *Max,uint32_t *Min)
@@ -131,7 +134,8 @@ uint32_t DeleteMaxAndMinGetAverage(uint32_t *ary,uint8_t Length,uint32_t *Max,ui
     {
 			Sum += ary[j];
 		}
-		return (Sum-*Max-*Min)/(Length-2);
+		//return (Sum-*Max-*Min)/(Length-2);
+		return (Sum)/(Length);
 }
 /*求总和*/
 void GetSum(uint32_t *SUM,uint32_t *arry,uint8_t arryLength)
@@ -147,10 +151,14 @@ void GetSum(uint32_t *SUM,uint32_t *arry,uint8_t arryLength)
 void GetAverage(uint32_t *Average,uint32_t *arry,uint8_t arryLength)
 {
 		int j;
+		uint32_t sum;
 		for (j=0; j<arryLength; j++)
     {
-			*Average += arry[j];
+			sum+= arry[j];
+			
 		}
+		*Average  = sum / j;
+		
 }
 
 /*清零函数*/
@@ -167,21 +175,21 @@ void ClearData(uint32_t *ary,uint8_t Length)
 /*记录CPV并设置OUT的输出*/
 void CPV_SET_OUT(void)
 {
-		if(LastRegisterA==0&&RegisterA==1)
+		if(LastOUT1==0&&OUT1==1)
 		{
 			CPV++;
-			if(CPV>=SV) /*如果计数器达到预先设定的CSV，清零，OUT2输出一个高电平*/
+			if(CPV>=SV) /*如果计数器达到预先设定的SV，清零，OUT2输出一个高电平*/
 			{
 				OUT2 = 1;
-				CPV = 0;
+				//CPV = 0;
 			}
-			if(CPV>=FSV) /*如果计数器达到预先设定的CSV，清零，OUT2输出一个高电平*/
+			if(CPV>=FSV) /*如果计数器达到预先设定的FSV，清零，OUT3输出一个高电平*/
 			{
 				OUT3 = 1;
 				CPV = 0;
 			}
 		}
-		LastRegisterA = RegisterA;
+		LastOUT1 = OUT1;
 		/*显示OUT1和OUT2的状态*/
 		SMG_DisplayOUT_STATUS(OUT1,OUT2,OUT3);
 }
@@ -192,6 +200,10 @@ void DMA1_Channel1_IRQHandler(void)
 {
 	uint32_t 	SX_Max=0;
 	uint32_t 	SX_Min=0;
+
+	uint32_t 	TX_Max=0;
+	uint32_t 	TX_Min=0;
+
  	/*判断DMA传输完成中断*/ 
 	if(DMA_GetITStatus(DMA1_IT_TC1) != RESET)                        
 	{ 
@@ -203,14 +215,27 @@ void DMA1_Channel1_IRQHandler(void)
 		S[3] = 4095-adc_dma_tab[3];
 		GetSum(&SX[S_Index++],S,4);/*四个通道总和*/
 		S_Flag = 1;
+		
 		if(S_Index>3)	
 		{
 				S_Index = 0;
+				/*SX,FX*/
 				SX_Final[SX_Index] = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min);/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*/
 				S_Final = SX_Final[SX_Index];	/*获得最终信号值*/
 				S_Final_FinishFlag = 1;
-				TX = (SX_Max-SX_Min)*1.5;  /*求得TX*/
+				FX = (SX_Max-SX_Min);  /*求得FX*/
 				ClearData(SX,4);/*清零*/
+			
+				/*TX*/
+				GetSum(&TX_Signal[TX_Index++],SX_Final,1);/*六次总和,TX*/
+				if(TX_Index>5)
+				{
+					TX_Index = 0;
+					DeleteMaxAndMinGetAverage(TX_Signal,6,&TX_Max,&TX_Min);
+					TX = TX_Max-TX_Min;/*求得TX*/
+					ClearData(TX_Signal,6);/*清零*/
+				}
+				
 				if(PWMCounter>50)/*大于等于50个PWM脉冲，才开始计算RegisterA*/
 					SetRegisterA(S_Final);/*判断RegisterA的状态*/
 				if(PWMCounter>80)
@@ -229,6 +254,7 @@ void DMA1_Channel1_IRQHandler(void)
 						GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
 						Threshold = S_SET-80;   /*更新阀值*/
 						SelftStudyflag = 0;
+						WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
 					}
 					/*判断灰层影响程度*/
 					if(RegisterA)
@@ -272,7 +298,7 @@ uint32_t  ADCDispalyProcess(uint32_t *ADC_RowValue,uint16_t Length)
 	for(k=0;k<Length;k++)
 		SumADCValue += ADC_RowValue[k];
 	
-	DisplayADCValue = SumADCValue/(k*8);
+	DisplayADCValue = SumADCValue/(k);
 	
 	return DisplayADCValue;
 }
@@ -300,9 +326,9 @@ uint8_t GetRegisterAState(uint32_t ADCValue)
 void PG120_Function(void)
 {
 	GetEEPROM();
+	ATTSet(ATT100);
 	while(1)
 	{
-		
 		if(DustFlag)
 		{
 			Dust_Display();
@@ -310,11 +336,15 @@ void PG120_Function(void)
 		}
 		else
 		{
-					/*正常显示*/
+				/*正常显示*/
 				if(SX_Flag)
 				{
 					SX_Flag = 0;
-					ADC_Display = ADCDispalyProcess(SX_Final,32);
+					if(EventFlag&Blink500msFlag) 
+					{
+						EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+						ADC_Display = ADCDispalyProcess(SX_Final,32);
+					}
 				}
 	
 				/*短路保护*/
@@ -340,9 +370,9 @@ void PG120_Function(void)
 				ButtonMapping();
 				
 				/*OUT2输出*/
-//				SetOUT2Status();
-//				/*OUT3输出*/
-//				SetOUT3Status();
+				SetOUT2Status();
+				/*OUT3输出*/
+				SetOUT3Status();
 				
 				if(KEY==ULOC)/*判断按键是否上锁*/
 				{
@@ -520,7 +550,7 @@ void DisplayModeONE_STD(void)
 				if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
 				{
 						tempPress = 0;
-					Threshold = Threshold+1;
+					Threshold = Threshold+2;
 				}
 			}
 			else 
@@ -528,7 +558,7 @@ void DisplayModeONE_STD(void)
 				if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
 				{
 						tempPress = 0;
-					Threshold = Threshold+1;
+					Threshold = Threshold+5;
 				}
 			}
 		}	
@@ -557,7 +587,7 @@ void DisplayModeONE_STD(void)
 			{
 				if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
 				{
-					Threshold = Threshold-1;
+					Threshold = Threshold-2;
 					tempPress = 0;
 				}
 			}
@@ -566,7 +596,7 @@ void DisplayModeONE_STD(void)
 				if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
 				{
 					tempPress = 0;
-					Threshold = Threshold-1;
+					Threshold = Threshold-5;
 				}
 			}
 		}
@@ -629,7 +659,7 @@ void DisplayModeONE_AREA(void)
 							if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
 							{
 								tempPress = 0;
-								HI = HI+1;
+								HI = HI+2;
 							}
 						}
 						else 
@@ -637,7 +667,7 @@ void DisplayModeONE_AREA(void)
 							if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
 							{
 								tempPress = 0;
-								HI = HI+1;
+								HI = HI+5;
 							}
 						}
 					if(HI>=4000)
@@ -674,7 +704,7 @@ void DisplayModeONE_AREA(void)
 							if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
 							{
 								tempPress = 0;
-								HI = HI-1;
+								HI = HI-2;
 							}
 						}
 						else 
@@ -682,7 +712,7 @@ void DisplayModeONE_AREA(void)
 							if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
 							{
 								tempPress = 0;
-								HI = HI-1;
+								HI = HI-5;
 							}
 						}
 						if(HI<=100)
@@ -731,7 +761,7 @@ void DisplayModeONE_AREA(void)
 							if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
 							{
 								tempPress = 0;
-								LO = LO + 1;
+								LO = LO + 2;
 							}
 						}
 						else 
@@ -739,7 +769,7 @@ void DisplayModeONE_AREA(void)
 							if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
 							{
 								tempPress = 0;
-								LO = LO + 1;
+								LO = LO + 5;
 							}
 						}
 						SMG_DisplayModeONE_Detect_AREA_LO(1,LO,ADC_Display);/*显示阀值*/
@@ -772,7 +802,7 @@ void DisplayModeONE_AREA(void)
 							if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
 							{
 								tempPress = 0;
-								LO = LO - 1;
+								LO = LO - 2;
 							}
 						}
 						else 
@@ -780,7 +810,7 @@ void DisplayModeONE_AREA(void)
 							if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
 							{
 								tempPress = 0;
-								LO = LO - 1;
+								LO = LO - 5;
 							}
 						}
 						SMG_DisplayModeONE_Detect_AREA_LO(1,LO,ADC_Display);/*显示阀值*/
@@ -955,18 +985,20 @@ void DEL_Set(void)
 *******************************/
 void SetRegisterA(uint32_t GetADCValue)
 {
+//	TX = 0; //debug
+//	DX = 0;
 	if(displayModeONE_FLAG) /*AREA Mode*/
 	{
 		if(GetADCValue>=LO-DX-TX && GetADCValue<=HI-DX+TX)
 			RegisterA = 1;
-		else if((GetADCValue>=(HI-DX+TX+HI/128+10)) ||(GetADCValue<=(LO-DX-TX-LO/128-10))) /*20171201*/
+		else if((GetADCValue>=(HI-DX+1.25*TX+HI/128+30)) ||(GetADCValue<=(LO-DX-0.25*TX-LO/128-30))) /*20171201*/
 			RegisterA = 0;
 	}	
 	else  /*STD Mode*/
 	{
-		if(GetADCValue>=(Threshold-DX+TX))
+		if(GetADCValue>=(Threshold-DX+1.25*TX)&&FX<=2*TX)
 			RegisterA = 1;
-		else if(GetADCValue<=(Threshold-DX-TX-Threshold/128-10))/*20171201*/
+		else if(GetADCValue<=(Threshold-DX-0.25*TX-Threshold/128-20))/*20171223*/
 			RegisterA = 0;
 	}
 }
@@ -1067,7 +1099,7 @@ void SetOUT2Status(void)
 		{
 			GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,Bit_SET);/*拉高*/
 		}
-	 if(OUT2_TimerCounter >=667)
+	 if(OUT2_TimerCounter >=80)
 		{
 			OUT2 = 0;
 			OUT2_TimerCounter = 0;  /*获取当前时间*/
@@ -1089,7 +1121,7 @@ void SetOUT3Status(void)
 		{
 			GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_SET);/*拉高*/
 		}
-	 if(OUT3_TimerCounter >=667)
+	 if(OUT3_TimerCounter >=160)
 		{
 			OUT3 = 0;
 			OUT3_TimerCounter = 0;  /*获取当前时间*/

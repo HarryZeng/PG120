@@ -973,11 +973,23 @@ void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS,uint8_t OUT3_
 		OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);
 
 		if(OUT1_STATUS==1 && OUT2_STATUS==0&&OUT3_STATUS==0)
-			SMG_data_Decode_table[0][8] = data_SMG_seg_table[33]|data_SMG_seg_table[34];						//D1	33->e,3->f seg	
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[30]|data_SMG_seg_table[31];						//D1	30->b,3->c seg	
 		else if(OUT1_STATUS==0 && OUT2_STATUS==1&&OUT3_STATUS==0)
-			SMG_data_Decode_table[0][8] = data_SMG_seg_table[30];						//D1	30->b seg
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[33];						//D1	33->e seg
 		else if(OUT1_STATUS==0 && OUT2_STATUS==0&&OUT3_STATUS==1)
-			SMG_data_Decode_table[0][8] = data_SMG_seg_table[31];						//D1	31->c seg
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[34];						//D1	34->f seg
+		else if(OUT1_STATUS==1 && OUT1_STATUS==1 && OUT3_STATUS==0)
+		{
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[30]|data_SMG_seg_table[31]|data_SMG_seg_table[33];						//b,c,e seg	
+		}
+		else if(OUT1_STATUS==0 && OUT1_STATUS==1 && OUT3_STATUS==1)
+		{
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[33]|data_SMG_seg_table[34];						//e,f seg	
+		}
+		else if(OUT1_STATUS==1 && OUT1_STATUS==0 && OUT3_STATUS==1)
+		{
+			SMG_data_Decode_table[0][8] = data_SMG_seg_table[30]|data_SMG_seg_table[31]|data_SMG_seg_table[34];						//b,c,f seg	
+		}
 		else if(OUT1_STATUS==1 && OUT1_STATUS==1 && OUT3_STATUS==1)
 		{
 			SMG_data_Decode_table[0][8]=data_SMG_seg_table[30]|data_SMG_seg_table[31]|data_SMG_seg_table[33]|data_SMG_seg_table[34];//OUT1，OUT2,OUT3同时亮
@@ -991,11 +1003,22 @@ void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS,uint8_t OUT3_
 /*END 显示菜单*/
 void END_Display(void)
 {
-		SMG_data_Decode_table[0][0]=data_SMG_seg_table[13];
-		SMG_data_Decode_table[0][1]=data_SMG_seg_table[18];
-		SMG_data_Decode_table[0][2]=data_SMG_seg_table[14];
-		SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];
-		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];
+
+		SMG_data_Decode_table[0][0]=data_SMG_seg_table[22];
+		SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];
+		if(EventFlag&Blink500msFlag) 
+		{
+			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+			SMG_data_Decode_table[0][2]=data_SMG_seg_table[13];
+			SMG_data_Decode_table[0][3]=data_SMG_seg_table[18];
+			SMG_data_Decode_table[0][4]=data_SMG_seg_table[14];
+		}
+		else
+		{
+			SMG_data_Decode_table[0][2]=data_SMG_seg_table[13];
+			SMG_data_Decode_table[0][3]=data_SMG_seg_table[18];
+			SMG_data_Decode_table[0][4]=data_SMG_seg_table[14];
+		}
 		SMG_data_Decode_table[0][5]=data_SMG_seg_table[22];
 		SMG_data_Decode_table[0][6]=data_SMG_seg_table[22];
 		SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];
