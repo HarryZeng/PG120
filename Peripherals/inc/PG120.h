@@ -106,7 +106,7 @@ void GetADCAverageValue(uint32_t *AverageValue);
 void GetEEPROM(void);
 void ResetParameter(void);
 void SetOUT1Status(void);
-
+void GetADCValue(void);
 	#ifdef __cplusplus
 	}
 	#endif

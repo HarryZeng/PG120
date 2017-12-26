@@ -322,6 +322,20 @@ uint8_t GetRegisterAState(uint32_t ADCValue)
 }
 
 
+void GetADCValue(void)
+{
+					/*正常显示*/
+		if(SX_Flag)
+		{
+			SX_Flag = 0;
+//			if(EventFlag&Blink500msFlag) 
+//			{
+				//EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+				ADC_Display = ADCDispalyProcess(SX_Final,32);
+			//}
+		}
+}
+
 
 void PG120_Function(void)
 {
@@ -336,17 +350,17 @@ void PG120_Function(void)
 		}
 		else
 		{
-				/*正常显示*/
-				if(SX_Flag)
-				{
-					SX_Flag = 0;
-					if(EventFlag&Blink500msFlag) 
-					{
-						EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-						ADC_Display = ADCDispalyProcess(SX_Final,32);
-					}
-				}
-	
+//				/*正常显示*/
+//				if(SX_Flag)
+//				{
+//					SX_Flag = 0;
+//					if(EventFlag&Blink500msFlag) 
+//					{
+//						EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+//						ADC_Display = ADCDispalyProcess(SX_Final,32);
+//					}
+//				}
+
 				/*短路保护*/
 				ShortCircuitProtection();
 
