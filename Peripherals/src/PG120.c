@@ -220,7 +220,7 @@ void DMA1_Channel1_IRQHandler(void)
 		{
 				S_Index = 0;
 				/*SX,FX*/
-				SX_Final[SX_Index] = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min);/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*/
+				SX_Final[SX_Index] = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min)-3000;/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*/
 				S_Final = SX_Final[SX_Index];	/*获得最终信号值*/
 				S_Final_FinishFlag = 1;
 				FX = (SX_Max-SX_Min);  /*求得FX*/
@@ -623,8 +623,8 @@ void DisplayModeONE_STD(void)
 			WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
 		}
 	}
-		if(Threshold>=4000)
-				Threshold = 4000;
+		if(Threshold>=9999)
+				Threshold = 9999;
 		else if(Threshold<=0)
 				Threshold = 0;
 }

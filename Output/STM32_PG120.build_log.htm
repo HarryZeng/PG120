@@ -27,7 +27,16 @@ Project File Date:  12/22/2017
 
 <h2>Output:</h2>
 Build target 'STM32_USART'
-"..\Output\STM32_PG120.axf" - 0 Error(s), 0 Warning(s).
+compiling PG120.c...
+..\Peripherals\src\PG120.c(1295): warning:  #188-D: enumerated type mixed with another type
+                        OUT1_Mode.DelayMode     = ReadFlash(OUT1_Mode_FLASH_DATA_ADDRESS);
+..\Peripherals\src\PG120.c(1300): warning:  #188-D: enumerated type mixed with another type
+                        KEY                                                                     = ReadFlash(KEY_FLASH_DATA_ADDRESS);
+..\Peripherals\src\PG120.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=35008 RO-data=368 RW-data=384 ZI-data=1992  
+FromELF: creating hex file...
+"..\Output\STM32_PG120.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   E:\project\MrWu\Project\Project\code\Code\PG120\PG120\user\RTE
