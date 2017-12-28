@@ -219,6 +219,11 @@
         <Ww>
           <count>4</count>
           <WinNumber>2</WinNumber>
+          <ItemText>SX_Final,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>2</WinNumber>
           <ItemText>SX_Final</ItemText>
         </Ww>
       </WatchWindow2>

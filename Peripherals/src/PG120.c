@@ -88,7 +88,7 @@ uint8_t 	S_Index=0;
 uint8_t 	S_Flag=0;
 
 uint32_t 	SX[4];
-uint32_t 	SX_Final[32];
+int32_t 	SX_Final[32];
 uint8_t 	SX_Flag;
 uint8_t 	SX_Index=0;
 
@@ -204,6 +204,8 @@ void DMA1_Channel1_IRQHandler(void)
 	uint32_t 	TX_Max=0;
 	uint32_t 	TX_Min=0;
 
+	int32_t tempdata;
+	
  	/*判断DMA传输完成中断*/ 
 	if(DMA_GetITStatus(DMA1_IT_TC1) != RESET)                        
 	{ 
@@ -220,7 +222,12 @@ void DMA1_Channel1_IRQHandler(void)
 		{
 				S_Index = 0;
 				/*SX,FX*/
-				SX_Final[SX_Index] = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min)-3000;/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*/
+				tempdata = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min);
+				SX_Final[SX_Index] = tempdata - 3000;/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*/
+				/*数据限位*/
+				if(SX_Final[SX_Index]>9999) SX_Final[SX_Index] = 9999;
+				if(SX_Final[SX_Index]<=0) SX_Final[SX_Index] = 0;
+				
 				S_Final = SX_Final[SX_Index];	/*获得最终信号值*/
 				S_Final_FinishFlag = 1;
 				FX = (SX_Max-SX_Min);  /*求得FX*/
@@ -278,17 +285,6 @@ void DMA1_Channel1_IRQHandler(void)
 	DMA_ClearITPendingBit(DMA1_IT_TC1); 
 }
 
-/*获取四个ADC通道采样后，求平均的值*/
-void GetADCAverageValue(uint32_t *AverageValue)
-{
-		if(S_Flag)
-		{
-			S_Flag=0;
-			
-			*AverageValue = (S[0]+S[1]+S[2]+S[3])/4;
-			
-		}
-}
 /*采样完成后，ADC数据处理*/
 uint32_t  ADCDispalyProcess(uint32_t *ADC_RowValue,uint16_t Length)
 {
