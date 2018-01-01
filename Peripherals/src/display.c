@@ -1089,6 +1089,30 @@ void SMG_DisplayATT100(int16_t ATT100Value,uint32_t ADCValue)
 		SMG_data_Decode_table[0][7]=data_SMG_seg_table[10];														//D8	A
 }
 
+/*PERCENTAGE  ²Ëµ¥*/
+void SMG_DisplayPERCENTAGE(int16_t PERCENTAGE_Value)
+{ 
+		uint8_t k_PER_counter;
+		
+		/*PERCENTAGE*/
+		k_PER_counter = GetIntNumber(PERCENTAGE_Value);
+		
+		SMG_data_Decode_table[0][0]=data_SMG_seg_table[24];				//P 24
+		
+		SMG_data_Decode_table[0][1]=data_SMG_seg_table[PERCENTAGE_Value%10];							//D1
+		if(k_PER_counter>=2)
+			SMG_data_Decode_table[0][2]=data_SMG_seg_table[(PERCENTAGE_Value/10)%10];				//D2
+		else
+			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
+
+			SMG_data_Decode_table[0][3]=data_SMG_seg_table[35];      // 35 -
+		
+			SMG_data_Decode_table[0][4]=data_SMG_seg_table[28];				//	R	28
+			SMG_data_Decode_table[0][5]=data_SMG_seg_table[14];				//	E	14
+			SMG_data_Decode_table[0][6]=data_SMG_seg_table[24];				//	P 24
+			SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];
+}
+
 
 /***********************************************************************
 *

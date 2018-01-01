@@ -412,10 +412,10 @@ void ADC1_Init(void)
   ADC_Init(ADC1, &ADC_InitStructure);
 
   /* ADC1 regular configuration */ 
-  ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 1, ADC_SampleTime_1Cycles5);
-  ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 2, ADC_SampleTime_1Cycles5);
-  ADC_RegularChannelConfig(ADC1, ADC_Channel_7, 3, ADC_SampleTime_1Cycles5);
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 4, ADC_SampleTime_1Cycles5);
+  ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 1, ADC_SampleTime_7Cycles5);
+  ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 2, ADC_SampleTime_7Cycles5);
+  ADC_RegularChannelConfig(ADC1, ADC_Channel_7, 3, ADC_SampleTime_7Cycles5);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 4, ADC_SampleTime_7Cycles5);
 
    ADC_DMACmd(ADC1 , ENABLE);
    ADC_ExternalTrigConvCmd(ADC1, ENABLE);

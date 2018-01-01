@@ -27,24 +27,7 @@ Project File Date:  12/22/2017
 
 <h2>Output:</h2>
 Build target 'STM32_USART'
-compiling PG120.c...
-..\Peripherals\src\PG120.c(237): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
-                                GetSum(&TX_Signal[TX_Index++],SX_Final,1);/*六次总和,TX*/
-..\Peripherals\src\PG120.c(261): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
-                                                GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
-..\Peripherals\src\PG120.c(269): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
-                                                GetAverage(&S32,SX_Final,32);/*将32个信号值累加求平均*/
-..\Peripherals\src\PG120.c(330): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
-                                ADC_Display = ADCDispalyProcess(SX_Final,32);
-..\Peripherals\src\PG120.c(1291): warning:  #188-D: enumerated type mixed with another type
-                        OUT1_Mode.DelayMode     = ReadFlash(OUT1_Mode_FLASH_DATA_ADDRESS);
-..\Peripherals\src\PG120.c(1296): warning:  #188-D: enumerated type mixed with another type
-                        KEY                                                                     = ReadFlash(KEY_FLASH_DATA_ADDRESS);
-..\Peripherals\src\PG120.c: 6 warnings, 0 errors
-linking...
-Program Size: Code=35004 RO-data=368 RW-data=384 ZI-data=1992  
-FromELF: creating hex file...
-"..\Output\STM32_PG120.axf" - 0 Error(s), 6 Warning(s).
+"..\Output\STM32_PG120.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   E:\project\MrWu\Project\Project\code\Code\PG120\PG120\user\RTE

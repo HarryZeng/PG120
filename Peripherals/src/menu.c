@@ -23,11 +23,15 @@
 int32_t SV = 900; 		/*接近final Value*/
 uint16_t FSV = 1000;	/*FINAL SET VALUE*/
 int16_t ATT100=100;
+int8_t PERCENTAGE=1;
+
 
 OUT1_DELAY_MODE_STRUCT OUT1_Mode={TOFF,10};
 int8_t DispalyNo=0;
-/*SV COUNTER设定菜单*/
+/*ATT100设定菜单*/
 void MenuOne_ATT100(void);
+/*PERCENTAGE设定菜单*/
+void Menu_PERCENTAGE(void);
 /*FSV COUNTER设定菜单*/
 void MenuOne_FSV(void);
 void MenuOne_SV(void);
@@ -38,6 +42,7 @@ void MenuTwo_OUT1_ON_D(void);
 void MenuTwo_OUT1_SHOT(void);
 extern uint8_t  displayModeONE_FLAG;
 extern uint32_t tempPress;
+extern uint8_t DX_Flag;
 void menu(void)
 {
 	static uint8_t lastCounter;
@@ -51,13 +56,20 @@ void menu(void)
 	{
 		while(((ModeButton.Status==Press&&(ModeButton.PressTimer>=ModeButton.LongTime)) || (ModeButton.Effect==PressLong)))//&&DownButton.Status==Release)
 		{
+				DX_Flag = 0;
 				ModeButton.PressCounter = 0;
 				MenuOne_ATT100();   
 				while(ModeButton.PressCounter==1)
 				{
 					MenuOne_ATT100();
-				}				
+				}	
+				
 				while(ModeButton.PressCounter==2)
+				{
+					Menu_PERCENTAGE();
+				}
+				
+				while(ModeButton.PressCounter==3)
 				{
 					/*DETECT*//*数码管显示*/
 					SMG_DisplayModeDETECT(displayModeONE_FLAG);
@@ -87,20 +99,20 @@ void menu(void)
 				}
 				
 				
-				while(ModeButton.PressCounter==3)
+				while(ModeButton.PressCounter==4)
 				{
 					/*SV COUNTER设定菜单*/
 					MenuOne_SV();
 				}
 				
-				while(ModeButton.PressCounter==4)
+				while(ModeButton.PressCounter==5)
 				{
 					/*FSV COUNTER设定菜单*/
 					MenuOne_FSV();
 				}
 				
 				/*显示先前定时器选定菜单*/
-				if(ModeButton.PressCounter==5 && ModeButton.Effect==PressShort)
+				if(ModeButton.PressCounter==6 && ModeButton.Effect==PressShort)
 				{
 					if(OUT1_Mode.DelayMode == TOFF)
 						DispalyNo = 0;
@@ -111,15 +123,16 @@ void menu(void)
 					else if(OUT1_Mode.DelayMode == SHOT)
 						DispalyNo = 3;
 				}
-				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==5)
+				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==6)
 				{
 						MenuTwo_OUT1_DelaySET();
 				}
-				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==6)
+				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==7)
 				{
 						END_Display();
+						DX_Flag = 1;
 						/*再短按MODE，则退出菜单*/
-						if(ModeButton.Effect==PressShort && ModeButton.PressCounter>=7) 
+						if(ModeButton.Effect==PressShort && ModeButton.PressCounter>=8) 
 						{
 							ModeButton.PressCounter = 0;
 							ModeButton.Status = Release;
@@ -245,6 +258,112 @@ void MenuOne_ATT100(void)
 	
 }
 
+
+void Menu_PERCENTAGE(void)
+{
+	static uint8_t lastCounter;
+	uint8_t Flashflag=0;
+	
+	SMG_DisplayPERCENTAGE(PERCENTAGE); //显示
+	
+	/*Up Button*/
+	if(UpButton.PressCounter !=lastCounter && UpButton.Effect==PressShort)
+	{
+		lastCounter = UpButton.PressCounter;
+		UpButton.PressCounter = 0;
+		PERCENTAGE = PERCENTAGE+1;
+		Flashflag = 1;
+	}
+	else 	if(UpButton.Status==Press&&(UpButton.Effect==PressLong))
+	{				/*还按着按键，并且时间超过长按时间*/
+		UpButton.PressCounter = 0;
+		if(UpButton.PressTimer<KEY_LEVEL_1)
+		{
+			if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
+				PERCENTAGE = PERCENTAGE+1;
+				Flashflag = 1;
+			}
+		}
+		else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<KEY_LEVEL_2)
+		{
+			if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
+				PERCENTAGE = PERCENTAGE+2;
+				Flashflag = 1;
+			}
+		}
+		else 
+		{
+			if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
+				PERCENTAGE = PERCENTAGE+5;
+				Flashflag = 1;
+			}
+		}
+	}	
+	else
+	{
+		UpButton.Effect = PressShort;
+	}
+	
+	/*Down Button*/
+	if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
+	{
+		DownButton.PressCounter = 0;
+		PERCENTAGE = PERCENTAGE-1;
+		Flashflag = 1;
+	}
+	else 	if(DownButton.Status==Press&&(DownButton.Effect==PressLong))
+	{				/*还按着按键，并且时间超过长按时间*/
+		DownButton.PressCounter = 0;
+		if(DownButton.PressTimer<KEY_LEVEL_1)
+		{
+			if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
+				PERCENTAGE = PERCENTAGE-1;
+				Flashflag = 1;
+			}
+		}
+		else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
+		{
+			if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
+				PERCENTAGE = PERCENTAGE-2;
+				Flashflag = 1;
+			}
+		}
+		else 
+		{
+			if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+			{
+				tempPress = 0;
+				PERCENTAGE = PERCENTAGE-5;
+				Flashflag = 1;
+			}
+		}
+	}
+	else
+	{
+		DownButton.Effect = PressShort;
+	}
+	
+	if(PERCENTAGE<=1)
+			PERCENTAGE =1;
+	else if(PERCENTAGE>=50)
+			PERCENTAGE =50;
+	
+		if(EventFlag&Blink500msFlag && Flashflag==1) 
+		{
+			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+			WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
+		}
+}
 
 
 

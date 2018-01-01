@@ -33,6 +33,7 @@ uint8_t 	selfDisplayEndFlay=0;
 uint32_t  SET1ADC_Value=0;
 
 extern int16_t adc_dma_tab[4];
+extern  uint8_t DX_Flag;
 void selfstudy(void)
 {
 	uint8_t OUT1_STATUS,OUT2_STATUS,OUT3_STATUS;
@@ -47,6 +48,7 @@ void selfstudy(void)
 			/*第一次进入SET模式*/
 			while(SetButton.Status == Press )     //只要在显示模式下第一次按下SET按键
 			{	
+				DX_Flag = 0;
 					/*保持OUT1的状态*/
 					OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);/*获取当前的OUT1状态*/
 				GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,(BitAction)OUT1_STATUS);/*保持着OUT1状态*/
@@ -57,7 +59,11 @@ void selfstudy(void)
 				
 				/*按着按键3秒内*/
 				SMG_DisplaySET_Step_1_Mode(0,Threshold);
-				if(SetButton.Status == Release) break;
+				if(SetButton.Status == Release) 
+				{
+					DX_Flag = 1;
+					break;
+				}
 				//Test_Delay(1000);
 		//		/*这里要显示SET1*/
 		//		if(EventFlag&Blink500msFlag) 
@@ -84,6 +90,7 @@ void selfstudy(void)
 					//}
 					else if(SetButton.Effect == PressLong && SetButton.Status==Press ) /*按键达到3秒后，第一次进入自学习，等待第二次按下SET 3秒*/
 					{	
+						DX_Flag = 0;
 						ATTcalibration();
 						
 						/*3秒到了，并释放了按键*/
@@ -102,6 +109,7 @@ void selfstudy(void)
 						//GetMAXADCValue();
 						while(SetButton.Status==Press)
 						{
+							DX_Flag = 1;
 							SMG_DisplaySET_Step_1_Mode(2,Threshold);
 							SetButton.Effect = PressShort;
 						}

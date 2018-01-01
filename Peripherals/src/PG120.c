@@ -34,6 +34,7 @@ bool timeflag = 0;
 uint8_t LastOUT1=0;
 uint8_t RegisterA=0;
 uint8_t RegisterB=1;
+uint8_t RegisterC=0;
 uint8_t OUT1=0;
 uint8_t OUT2=0;
 uint8_t OUT3=0;
@@ -41,7 +42,7 @@ int16_t OUT2_TimerCounter=0;
 uint16_t OUT2_Timer=0;
 int16_t 	OUT3_TimerCounter=0;
 uint16_t OUT3_Timer=0;
-uint32_t ADCValue=0;
+uint32_t ADCRawValue=0;
 uint32_t ADC_Display=0;
 int32_t DACOUT = 1000;
 uint32_t CPV = 0;
@@ -75,6 +76,7 @@ void Test_Delay(uint32_t ms);
 uint32_t ADCDispalyProcess(uint32_t *ADC_RowValue,uint16_t Length);
 uint8_t CheckDust(void);
 
+extern int8_t PERCENTAGE;
 extern int16_t ATT100;
 extern uint16_t FSV;
 extern int32_t SV;
@@ -107,12 +109,17 @@ int16_t 	Threshold=1000;
 int16_t 	DX=0;
 int16_t 	Last_DX=0;
 int16_t 	Min_DX=0;
+uint8_t		DX_Flag=1;
 
 uint8_t 	TX_Index=0;
 uint32_t 	TX=0;
 uint32_t 	TX_Signal[6];
 int16_t 	FX=0;
 
+uint32_t 	Display_Signal[256];
+uint32_t 	Display_Signal_Index=0;
+uint32_t 	Display_Signal_Flag=0;
+uint32_t 	DisplayADCValue_Sum=0;
 /*去除最大最小值后剩下的数据求平均*/
 uint32_t DeleteMaxAndMinGetAverage(uint32_t *ary,uint8_t Length,uint32_t *Max,uint32_t *Min)
 {
@@ -196,6 +203,60 @@ void CPV_SET_OUT(void)
 
 
 uint8_t PWMCounter=0;
+uint32_t S1024=0;
+uint16_t S1024_Index=0;
+uint32_t S1024_Sum=0;
+
+void JudgeDX(void)
+{
+		/*判断灰层影响程度*/
+	if(displayModeONE_FLAG ==0)
+	{
+		if(RegisterA) //STD——Mode
+		{
+			
+			S1024_Sum = S1024_Sum + S_Final;
+			S1024_Index++;
+			if(S1024_Index>=1024)
+			{
+				S1024 = S1024_Sum / 1024; //求得S1024
+				DX = S_SET - S1024;					//modifiy 20171230
+			}
+			if(DX<=-1500) DX=-1500;
+			if(DX>=1500) DX = 1500;   
+			
+			Last_DX = DX;
+			
+			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/  
+				Min_DX = DX;
+			
+				//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
+		}
+	}
+	else if(displayModeONE_FLAG ==1) /*Area Mode*/
+	{
+		if(RegisterC) 
+		{
+			S1024_Sum = S1024_Sum + S_Final;
+			S1024_Index++;
+			if(S1024_Index>=1024)
+			{
+				S1024 = S1024_Sum / 1024; //求得S1024
+				DX = S_SET - S1024;					//modifiy 20171230
+			}
+			if(DX<=-1500) DX=-1500;
+			if(DX>=1500) DX = 1500;   
+			
+			Last_DX = DX;
+			
+			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/  
+				Min_DX = DX;
+			
+				//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
+		}
+	}
+}
+
 void DMA1_Channel1_IRQHandler(void)
 {
 	uint32_t 	SX_Max=0;
@@ -204,6 +265,9 @@ void DMA1_Channel1_IRQHandler(void)
 	uint32_t 	TX_Max=0;
 	uint32_t 	TX_Min=0;
 
+	uint32_t 	Dispaly_Max=0;
+	uint32_t 	Dispaly_Min=0;
+	
 	int32_t tempdata;
 	
  	/*判断DMA传输完成中断*/ 
@@ -225,22 +289,40 @@ void DMA1_Channel1_IRQHandler(void)
 				tempdata = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min);
 				SX_Final[SX_Index] = tempdata - 3000;/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*/
 				/*数据限位*/
-				if(SX_Final[SX_Index]>9999) SX_Final[SX_Index] = 9999;
-				if(SX_Final[SX_Index]<=0) SX_Final[SX_Index] = 0;
-				
-				S_Final = SX_Final[SX_Index];	/*获得最终信号值*/
+				if(SX_Final[SX_Index]>=9999) 
+					SX_Final[SX_Index] = 9999;
+				if(SX_Final[SX_Index]<=0) 
+					SX_Final[SX_Index] = 0;
+					
+				/*求得S最终信号*/
+				S_Final = SX_Final[SX_Index] + DX;	/*获得最终信号值 信号值加上DX，得到的数据作为最终信号值*/
+				if(S_Final>=9999) S_Final=9999;
+				if(S_Final<=0) S_Final=0;
 				S_Final_FinishFlag = 1;
+			
 				FX = (SX_Max-SX_Min);  /*求得FX*/
 				ClearData(SX,4);/*清零*/
 			
 				/*TX*/
-				GetSum(&TX_Signal[TX_Index++],SX_Final,1);/*六次总和,TX*/
-				if(TX_Index>5)
+				GetSum(&TX_Signal[TX_Index++],&S_Final,1);/*八次总和,TX*/
+				if(TX_Index>7)
 				{
 					TX_Index = 0;
 					DeleteMaxAndMinGetAverage(TX_Signal,6,&TX_Max,&TX_Min);
-					TX = TX_Max-TX_Min;/*求得TX*/
+					TX = (TX_Max-TX_Min)*2;/*求得TX*/
 					ClearData(TX_Signal,6);/*清零*/
+				}
+				
+				/*显示数据计数*/
+				GetSum(&DisplayADCValue_Sum,&S_Final,1);/*八次总和,TX*/
+				Display_Signal_Index++;
+				if(Display_Signal_Index>=255)
+				{
+					//ADC_Display = DeleteMaxAndMinGetAverage(&DisplayADCValue_Sum,1,&Dispaly_Max,&Dispaly_Min);
+					ADCRawValue = DisplayADCValue_Sum/256;
+					Display_Signal_Index = 0;
+					Display_Signal_Flag	=	1;
+					DisplayADCValue_Sum = 0;
 				}
 				
 				if(PWMCounter>50)/*大于等于50个PWM脉冲，才开始计算RegisterA*/
@@ -249,6 +331,9 @@ void DMA1_Channel1_IRQHandler(void)
 					SetOUT1Status();/*大于等于50个PWM脉冲，才开始设置OUT输出*/
 				/*根据CPV，设置OUT输出*/
 				CPV_SET_OUT();
+				/*判断灰层*/
+				if(DX_Flag==1)
+					JudgeDX();
 				/*累计32组数据*/
 				SX_Index++;
 				if(SX_Index>32)
@@ -259,26 +344,12 @@ void DMA1_Channel1_IRQHandler(void)
 					if(SelftStudyflag)
 					{
 						GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
-						Threshold = S_SET-80;   /*更新阀值*/
+						//Threshold = S_SET-80;   /*更新阀值*/
+						Threshold = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/
 						SelftStudyflag = 0;
 						WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
 					}
-					/*判断灰层影响程度*/
-					if(RegisterA)
-					{
-						GetAverage(&S32,SX_Final,32);/*将32个信号值累加求平均*/
-						DX = ((S_SET - S32)*3)/4;
-						if(DX<=0) DX=0;
-						
-						Last_DX = DX;
-						
-						if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/  
-							Min_DX = DX;
-					}
 				}
-
-				if(S_Final>=9999) S_Final=9999;
-				if(S_Final<=0) S_Final=0;
 		}
 	}
 	/*清除DMA中断标志位*/	
@@ -317,19 +388,19 @@ uint8_t GetRegisterAState(uint32_t ADCValue)
 	return A;
 }
 
+/*	正常显示*/
+/********************
+*
+*显示ADC的值处理
+*
+**********************/
 
 void GetADCValue(void)
 {
+		uint32_t 	Dispaly_Max=0;
+		uint32_t 	Dispaly_Min=0;
 					/*正常显示*/
-		if(SX_Flag)
-		{
-			SX_Flag = 0;
-//			if(EventFlag&Blink500msFlag) 
-//			{
-				//EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-				ADC_Display = ADCDispalyProcess(SX_Final,32);
-			//}
-		}
+			ADC_Display =ADCRawValue;
 }
 
 
@@ -339,7 +410,7 @@ void PG120_Function(void)
 	ATTSet(ATT100);
 	while(1)
 	{
-		if(DustFlag)
+		if(0)
 		{
 			Dust_Display();
 			GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);/*一直将OUT1拉低*/
@@ -400,7 +471,8 @@ void PG120_Function(void)
 **********************************/
 uint8_t CheckDust(void)
 {
-	if(DX>(S32/2))
+	//if(DX>(S32/2))
+	if(DX>=1501)
 	{
 		return 1;
 	}
@@ -999,17 +1071,31 @@ void SetRegisterA(uint32_t GetADCValue)
 //	DX = 0;
 	if(displayModeONE_FLAG) /*AREA Mode*/
 	{
-		if(GetADCValue>=LO-DX-TX && GetADCValue<=HI-DX+TX)
+//		if(GetADCValue>=LO-DX-TX && GetADCValue<=HI-DX+TX)
+//			RegisterA = 1;
+//		else if((GetADCValue>=(HI-DX+1.25*TX+HI/128+30)) ||(GetADCValue<=(LO-DX-0.25*TX-LO/128-30))) /*20171201*/
+//			RegisterA = 0;
+		if(GetADCValue>=LO+TX && GetADCValue<=HI-TX-80-HI/128)
 			RegisterA = 1;
-		else if((GetADCValue>=(HI-DX+1.25*TX+HI/128+30)) ||(GetADCValue<=(LO-DX-0.25*TX-LO/128-30))) /*20171201*/
+		else if(((GetADCValue>=(HI+TX))&&(GetADCValue<=9999))||(GetADCValue<=(LO-TX-LO/128)))							 /*20171231*/
 			RegisterA = 0;
+		
+		/*RegisterC*/
+		if(GetADCValue>=HI+TX)
+			RegisterC = 1;
+		else if(GetADCValue<=HI-TX-HI/128)
+			RegisterC = 0;
 	}	
 	else  /*STD Mode*/
 	{
-		if(GetADCValue>=(Threshold-DX+1.25*TX)&&FX<=2*TX)
-			RegisterA = 1;
-		else if(GetADCValue<=(Threshold-DX-0.25*TX-Threshold/128-20))/*20171223*/
-			RegisterA = 0;
+//		if(GetADCValue>=(Threshold-DX+1.25*TX)&&FX<=2*TX)
+//			RegisterA = 1;
+//		else if(GetADCValue<=(Threshold-DX-0.25*TX-Threshold/128-20))/*20171223*/
+//			RegisterA = 0;
+				if(GetADCValue>=Threshold+TX)  //20171231
+					RegisterA = 1;
+				else if(GetADCValue<=(Threshold-TX-Threshold/128))/*20171223*/
+					RegisterA = 0;
 	}
 }
 
@@ -1299,7 +1385,7 @@ void GetEEPROM(void)
 			HI 										= ReadFlash(HI_FLASH_DATA_ADDRESS);
 			LO 										= ReadFlash(LO_FLASH_DATA_ADDRESS);
 			displayModeONE_FLAG 	= ReadFlash(DETECT_FLASH_DATA_ADDRESS);
-			
+			PERCENTAGE 						= ReadFlash(PERCENTAGE_FLASH_DATA_ADDRESS);
 }
 
 /*****************************
@@ -1320,6 +1406,7 @@ void ResetParameter(void)
 		HI = 1000;
 		LO = 700 ;
 		displayModeONE_FLAG = 0;
+		PERCENTAGE = 1;
 		
 		WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
 		Test_Delay(50); 
@@ -1342,6 +1429,8 @@ void ResetParameter(void)
 		WriteFlash(LO_FLASH_DATA_ADDRESS,LO);
 		Test_Delay(50); 
 		WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+		Test_Delay(50);
+		WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
 		
 		ModeButton.Effect=PressNOEffect;
 		ModeButton.PressTimer = 0;
