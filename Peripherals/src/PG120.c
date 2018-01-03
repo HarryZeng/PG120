@@ -215,7 +215,8 @@ void JudgeDX(void)
 		if(RegisterA) //STD——Mode
 		{
 			
-			S1024_Sum = S1024_Sum + S_Final;
+			//S1024_Sum = S1024_Sum + S_Final;
+			S1024_Sum = S1024_Sum + SX_Final[SX_Index];
 			S1024_Index++;
 			if(S1024_Index>=1024)
 			{
@@ -224,13 +225,15 @@ void JudgeDX(void)
 				DX = S_SET - S1024;					//modifiy 20171230
 				S1024_Sum  = 0;
 			}
-			if(DX<=-1500) DX=-1500;
-			if(DX>=1500) DX = 1500;   
-			
-			Last_DX = DX;
-			
-			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/  
-				Min_DX = DX;
+			if(DX<=-1500) //有疑问，当最小是-1500时，没有比它更小的了
+				DX=-1500;
+			if(DX>=1500) 
+				DX = 1500;   
+//			
+//			Last_DX = DX;
+//			
+//			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/  
+//				Min_DX = DX;
 			
 				//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
 		}
@@ -248,13 +251,13 @@ void JudgeDX(void)
 			}
 			if(DX<=-1500) DX=-1500;
 			if(DX>=1500) DX = 1500;   
-			
-			Last_DX = DX;
-			
-			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/  
-				Min_DX = DX;
-			
-				//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
+//			
+//			Last_DX = DX;
+//			
+//			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/  
+//				Min_DX = DX;
+//			
+//				//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
 		}
 	}
 }
@@ -309,13 +312,13 @@ void DMA1_Channel1_IRQHandler(void)
 			
 				/*TX*/
 				GetSum(&TX_Signal[TX_Index++],&S_Final,1);/*八次总和,TX*/
-				if(TX_Index>5)
+				if(TX_Index>=8)
 				{
 					TX_Index = 0;
-					DeleteMaxAndMinGetAverage(TX_Signal,6,&TX_Max,&TX_Min);
+					DeleteMaxAndMinGetAverage(TX_Signal,8,&TX_Max,&TX_Min);
 					TX = (TX_Max-TX_Min)*2;/*求得TX*/
 					//TX = 0;
-					ClearData(TX_Signal,6);/*清零*/
+					ClearData(TX_Signal,8);/*清零*/
 				}
 				
 				/*显示数据计数*/
@@ -351,11 +354,13 @@ void DMA1_Channel1_IRQHandler(void)
 					if(SelftStudyflag)
 					{
 						DX = 0;
-						GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
+						//GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
 						//Threshold = S_SET-80;   /*更新阀值*/
+						S_SET = S_Final;
 						Threshold = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/
 						SelftStudyflag = 0;
 						WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
+						WriteFlash(S_SET_FLASH_DATA_ADDRESS,S_SET);
 					}
 				}
 		}
@@ -1073,28 +1078,28 @@ void DEL_Set(void)
 *Set RegisterA value
 *
 *******************************/
-void SetRegisterA(uint32_t GetADCValue)
+void SetRegisterA(uint32_t ADCTestValue)
 {
 //	TX = 0; //debug
 //	DX = 0;
 	if(displayModeONE_FLAG) /*AREA Mode*/
 	{
-		if(GetADCValue>=LO+TX && GetADCValue<=HI-TX-80-HI/128)
+		if(ADCTestValue>=LO+TX && ADCTestValue<=HI-TX-80-HI/128)
 			RegisterA = 1;
-		else if(((GetADCValue>=(HI+TX))&&(GetADCValue<=9999))||(GetADCValue<=(LO-TX-LO/128)))							 /*20171231*/
+		else if(((ADCTestValue>=(HI+TX))&&(ADCTestValue<=9999))||(ADCTestValue<=(LO-TX-LO/128)))							 /*20171231*/
 			RegisterA = 0;
 		
 		/*RegisterC*/
-		if(GetADCValue>=HI+TX)
+		if(ADCTestValue>=HI+TX)
 			RegisterC = 1;
-		else if(GetADCValue<=HI-TX-HI/128)
+		else if(ADCTestValue<=HI-TX-HI/128)
 			RegisterC = 0;
 	}	
 	else  /*STD Mode*/
 	{
-				if(GetADCValue>=Threshold+TX)  //20171231
+				if(ADCTestValue>=Threshold+TX)  //20171231
 					RegisterA = 1;
-				else if(GetADCValue<=(Threshold-TX-Threshold/128))/*20171223*/
+				else if(ADCTestValue<=(Threshold-TX-120-Threshold/128))/*20171223*/
 					RegisterA = 0;
 	}
 }
@@ -1386,6 +1391,7 @@ void GetEEPROM(void)
 			LO 										= ReadFlash(LO_FLASH_DATA_ADDRESS);
 			displayModeONE_FLAG 	= ReadFlash(DETECT_FLASH_DATA_ADDRESS);
 			PERCENTAGE 						= ReadFlash(PERCENTAGE_FLASH_DATA_ADDRESS);
+			S_SET 								= ReadFlash(S_SET_FLASH_DATA_ADDRESS);
 }
 
 /*****************************
@@ -1431,6 +1437,8 @@ void ResetParameter(void)
 		WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
 		Test_Delay(50);
 		WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
+		Test_Delay(50);
+		WriteFlash(S_SET_FLASH_DATA_ADDRESS,S_SET);
 		
 		ModeButton.Effect=PressNOEffect;
 		ModeButton.PressTimer = 0;

@@ -212,7 +212,7 @@ void TIM2_init(void)
 		/*TIM2 Base Init*/
     TIM_DeInit(TIM2);                                               //复位TIM2  
     TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);                  //初始化TIM结构体  
-		TIM_TimeBaseStructure.TIM_Period=1728;                 //ARR  1728->27us,1920->30us,2048->32us,2496->39us
+		TIM_TimeBaseStructure.TIM_Period=2496;                 //ARR  1728->27us,1920->30us,2048->32us,2496->39us
 		TIM_TimeBaseStructure.TIM_Prescaler=0;
 		TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
 		TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; 
