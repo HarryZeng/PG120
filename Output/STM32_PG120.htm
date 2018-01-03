@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\Output\STM32_PG120.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\Output\STM32_PG120.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Tue Jan 02 07:50:37 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Wed Jan 03 15:26:43 2018
 <BR><P>
 <H3>Maximum Stack Usage =         96 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1789,7 +1789,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[18]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 </UL>
 
-<P><STRONG><a name="[cf]"></a>JudgeDX</STRONG> (Thumb, 306 bytes, Stack size 0 bytes, pg120.o(.text))
+<P><STRONG><a name="[cf]"></a>JudgeDX</STRONG> (Thumb, 316 bytes, Stack size 0 bytes, pg120.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[18]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 </UL>
 
@@ -1807,7 +1807,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[18]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 </UL>
 
-<P><STRONG><a name="[18]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 714 bytes, Stack size 32 bytes, pg120.o(.text))
+<P><STRONG><a name="[18]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 716 bytes, Stack size 32 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
@@ -1853,7 +1853,7 @@ Global Symbols
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ResetParameter
 </UL>
 
-<P><STRONG><a name="[bc]"></a>ResetParameter</STRONG> (Thumb, 516 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[bc]"></a>ResetParameter</STRONG> (Thumb, 514 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = ResetParameter &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
@@ -1901,7 +1901,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayMODE
 </UL>
 
-<P><STRONG><a name="[db]"></a>DisplayModeTWO</STRONG> (Thumb, 198 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[db]"></a>DisplayModeTWO</STRONG> (Thumb, 206 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = DisplayModeTWO &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
@@ -1919,7 +1919,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE
 </UL>
 
-<P><STRONG><a name="[de]"></a>DisplayModeONE_AREA</STRONG> (Thumb, 1482 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[de]"></a>DisplayModeONE_AREA</STRONG> (Thumb, 1490 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = DisplayModeONE_AREA &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
@@ -1929,7 +1929,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE
 </UL>
 
-<P><STRONG><a name="[df]"></a>DisplayModeONE</STRONG> (Thumb, 90 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[df]"></a>DisplayModeONE</STRONG> (Thumb, 88 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = DisplayModeONE &rArr; DisplayModeONE_AREA &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE_AREA
@@ -2042,7 +2042,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_init
 </UL>
 
-<P><STRONG><a name="[f7]"></a>TIM2_init</STRONG> (Thumb, 328 bytes, Stack size 40 bytes, bsp_init.o(.text))
+<P><STRONG><a name="[f7]"></a>TIM2_init</STRONG> (Thumb, 336 bytes, Stack size 40 bytes, bsp_init.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = TIM2_init &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_OC4PreloadConfig

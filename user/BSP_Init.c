@@ -203,7 +203,8 @@ void TIM2_init(void)
 		GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
 		GPIO_Init(GPIOA,&GPIO_InitStructure);
 	
-		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+		nvic_init_structure.NVIC_IRQChannelPreemptionPriority = 0;
 		nvic_init_structure.NVIC_IRQChannel = TIM2_IRQn;                //使能TIM2中断通道  
     nvic_init_structure.NVIC_IRQChannelCmd = ENABLE;                //使能TIM2中断  
     NVIC_Init(&nvic_init_structure); 
@@ -239,7 +240,7 @@ void TIM2_init(void)
 		TIM_OC3Init(TIM2,&TIM_OCInitStructure);                                                 
 		TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);	
 	
-		TIM_OCInitStructure.TIM_Pulse = 109;                                   //PWM2    109->1.7us    
+		TIM_OCInitStructure.TIM_Pulse = 109;                                   //PWM2    109->1.7us
 		TIM_OC4Init(TIM2,&TIM_OCInitStructure);                                                 
 		TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);	
 		

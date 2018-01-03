@@ -112,8 +112,8 @@ int16_t 	Min_DX=0;
 uint8_t		DX_Flag=1;
 
 uint8_t 	TX_Index=0;
-uint32_t 	TX=0;
-uint32_t 	TX_Signal[6];
+int32_t 	TX=0;
+uint32_t 	TX_Signal[8];
 int16_t 	FX=0;
 
 uint32_t 	Display_Signal[256];
@@ -219,8 +219,10 @@ void JudgeDX(void)
 			S1024_Index++;
 			if(S1024_Index>=1024)
 			{
+				S1024_Index = 0;
 				S1024 = S1024_Sum / 1024; //求得S1024
 				DX = S_SET - S1024;					//modifiy 20171230
+				S1024_Sum  = 0;
 			}
 			if(DX<=-1500) DX=-1500;
 			if(DX>=1500) DX = 1500;   
@@ -272,7 +274,7 @@ void DMA1_Channel1_IRQHandler(void)
 	
  	/*判断DMA传输完成中断*/ 
 	if(DMA_GetITStatus(DMA1_IT_TC1) != RESET)                        
-	{ 
+	{
 		if(PWMCounter<100)
 			PWMCounter++;
 		S[0] = 4095-adc_dma_tab[0];
@@ -296,8 +298,10 @@ void DMA1_Channel1_IRQHandler(void)
 					
 				/*求得S最终信号*/
 				S_Final = SX_Final[SX_Index] + DX;	/*获得最终信号值 信号值加上DX，得到的数据作为最终信号值*/
-				if(S_Final>=9999) S_Final=9999;
-				if(S_Final<=0) S_Final=0;
+				if(S_Final>=9999) 
+					S_Final=9999;
+				if(S_Final<=0) 
+					S_Final=0;
 				S_Final_FinishFlag = 1;
 			
 				FX = (SX_Max-SX_Min);  /*求得FX*/
@@ -305,11 +309,12 @@ void DMA1_Channel1_IRQHandler(void)
 			
 				/*TX*/
 				GetSum(&TX_Signal[TX_Index++],&S_Final,1);/*八次总和,TX*/
-				if(TX_Index>7)
+				if(TX_Index>5)
 				{
 					TX_Index = 0;
 					DeleteMaxAndMinGetAverage(TX_Signal,6,&TX_Max,&TX_Min);
 					TX = (TX_Max-TX_Min)*2;/*求得TX*/
+					//TX = 0;
 					ClearData(TX_Signal,6);/*清零*/
 				}
 				
@@ -320,9 +325,11 @@ void DMA1_Channel1_IRQHandler(void)
 				{
 					//ADC_Display = DeleteMaxAndMinGetAverage(&DisplayADCValue_Sum,1,&Dispaly_Max,&Dispaly_Min);
 					ADCRawValue = DisplayADCValue_Sum/256;
+					//ADC_Display = ADCRawValue;
 					Display_Signal_Index = 0;
 					Display_Signal_Flag	=	1;
 					DisplayADCValue_Sum = 0;
+					
 				}
 				
 				if(PWMCounter>50)/*大于等于50个PWM脉冲，才开始计算RegisterA*/
@@ -336,13 +343,14 @@ void DMA1_Channel1_IRQHandler(void)
 					JudgeDX();
 				/*累计32组数据*/
 				SX_Index++;
-				if(SX_Index>32)
+				if(SX_Index>31)
 				{
 					SX_Index = 0;
 					SX_Flag = 1;
 					/*自学习*/
 					if(SelftStudyflag)
 					{
+						DX = 0;
 						GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
 						//Threshold = S_SET-80;   /*更新阀值*/
 						Threshold = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/
@@ -1071,10 +1079,6 @@ void SetRegisterA(uint32_t GetADCValue)
 //	DX = 0;
 	if(displayModeONE_FLAG) /*AREA Mode*/
 	{
-//		if(GetADCValue>=LO-DX-TX && GetADCValue<=HI-DX+TX)
-//			RegisterA = 1;
-//		else if((GetADCValue>=(HI-DX+1.25*TX+HI/128+30)) ||(GetADCValue<=(LO-DX-0.25*TX-LO/128-30))) /*20171201*/
-//			RegisterA = 0;
 		if(GetADCValue>=LO+TX && GetADCValue<=HI-TX-80-HI/128)
 			RegisterA = 1;
 		else if(((GetADCValue>=(HI+TX))&&(GetADCValue<=9999))||(GetADCValue<=(LO-TX-LO/128)))							 /*20171231*/
@@ -1088,10 +1092,6 @@ void SetRegisterA(uint32_t GetADCValue)
 	}	
 	else  /*STD Mode*/
 	{
-//		if(GetADCValue>=(Threshold-DX+1.25*TX)&&FX<=2*TX)
-//			RegisterA = 1;
-//		else if(GetADCValue<=(Threshold-DX-0.25*TX-Threshold/128-20))/*20171223*/
-//			RegisterA = 0;
 				if(GetADCValue>=Threshold+TX)  //20171231
 					RegisterA = 1;
 				else if(GetADCValue<=(Threshold-TX-Threshold/128))/*20171223*/
