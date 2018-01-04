@@ -156,6 +156,36 @@ void IO_GPIO_INIT(void)
 }
 
 
+void TIM4_init(void)
+{
+	TIM_TimeBaseInitTypeDef timer_init_structure; 
+	NVIC_InitTypeDef NVIC_InitStructure;
+	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE); 
+	
+	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;                //使能TIM3中断通道  
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 3;  
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority= 3;          
+	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;     
+	NVIC_Init(&NVIC_InitStructure);
+	
+	/*TIM3*/
+	TIM_DeInit(TIM4);                                               //复位TIM3
+	TIM_TimeBaseStructInit(&timer_init_structure);                  //初始化TIM结构体  
+
+	timer_init_structure.TIM_ClockDivision = TIM_CKD_DIV1;          //系统时钟,不分频,24M  
+	timer_init_structure.TIM_CounterMode = TIM_CounterMode_Up;      //向上计数模式  
+	timer_init_structure.TIM_Period = 5000;                          //每300 uS触发一次中断,??ADC  
+	timer_init_structure.TIM_Prescaler = 0;                      //计数时钟分频,f=1M,systick=1 uS  
+	timer_init_structure.TIM_RepetitionCounter = 0x00;              //发生0+1的update事件产生中断 
+	
+	TIM_TimeBaseInit(TIM4, &timer_init_structure);  
+	TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);                       //使能TIM3中断
+	TIM_Cmd(TIM4, ENABLE);                                          //使能TIM3
+
+}
+
+
 void TIM3_init(void)
 {
 	TIM_TimeBaseInitTypeDef timer_init_structure; 
@@ -164,8 +194,8 @@ void TIM3_init(void)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE); 
 	
 	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;                //使能TIM3中断通道  
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 0;  
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority= 1;          
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 2;  
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority= 2;          
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;     
 	NVIC_Init(&NVIC_InitStructure);
 	
@@ -204,7 +234,8 @@ void TIM2_init(void)
 		GPIO_Init(GPIOA,&GPIO_InitStructure);
 	
 		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
-		nvic_init_structure.NVIC_IRQChannelPreemptionPriority = 0;
+		nvic_init_structure.NVIC_IRQChannelPreemptionPriority = 1;
+		nvic_init_structure.NVIC_IRQChannelPreemptionPriority= 1;
 		nvic_init_structure.NVIC_IRQChannel = TIM2_IRQn;                //使能TIM2中断通道  
     nvic_init_structure.NVIC_IRQChannelCmd = ENABLE;                //使能TIM2中断  
     NVIC_Init(&nvic_init_structure); 
@@ -212,7 +243,7 @@ void TIM2_init(void)
 		/*TIM2 Base Init*/
     TIM_DeInit(TIM2);                                               //复位TIM2  
     TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);                  //初始化TIM结构体  
-		TIM_TimeBaseStructure.TIM_Period=2496;                 //ARR  1728->27us,1920->30us,2048->32us,2496->39us
+		TIM_TimeBaseStructure.TIM_Period=2880;                 //ARR  1728->27us,1920->30us,2048->32us,2496->39us,2560->40us,2688->42us,2880->45us,3200->50us
 		TIM_TimeBaseStructure.TIM_Prescaler=0;
 		TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
 		TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; 

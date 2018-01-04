@@ -18,3 +18,4 @@
 ..\output\pg120.o: ..\Peripherals\inc\menu.h
 ..\output\pg120.o: ..\Peripherals\inc\flash.h
 ..\output\pg120.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dma.h
+..\output\pg120.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_tim.h

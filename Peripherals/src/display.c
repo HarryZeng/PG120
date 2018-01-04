@@ -970,7 +970,7 @@ void SMG_DisplaySET_Step_2_Mode(int16_t modeflag,uint32_t ADCINvalue,uint32_t Ne
 /*OUT1,OUT2,OUT3×´Ì¬ÏÔÊ¾*/
 void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS,uint8_t OUT3_STATUS)
 { 
-		OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);
+		//OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);
 
 		if(OUT1_STATUS==1 && OUT2_STATUS==0&&OUT3_STATUS==0)
 			SMG_data_Decode_table[0][8] = data_SMG_seg_table[30]|data_SMG_seg_table[31];						//D1	30->b,3->c seg	

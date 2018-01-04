@@ -34,6 +34,7 @@ void RCC_Configuration(void);
 void SMG_GPIO_INIT(void);
 void IO_GPIO_INIT(void);
 void TIM3_init(void);
+	 void TIM4_init(void);
 void TIM2_init(void);
 void TIM1_Init(void);
 void ADC1_Configuration(void);	 

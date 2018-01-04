@@ -64,6 +64,19 @@ void DelaymsSet(int16_t ms)
 		}
 }
 
+void TIM4_IRQHandler()  
+{
+    if(TIM_GetITStatus(TIM4,TIM_FLAG_Update))            //判断发生update事件中断  
+    {  
+        TIM_ClearITPendingBit(TIM4, TIM_FLAG_Update);     //清除update事件中断标志
+					//GPIO_WriteBit(OUT3_GPIO_Port, OUT3_Pin, (BitAction)(1 - GPIO_ReadOutputDataBit(OUT3_GPIO_Port, OUT3_Pin)));
+			//GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*拉高*/
+    }  
+} 
+
+
+
+
 void TIM2_IRQHandler()  
 {
     if(TIM_GetITStatus(TIM2, TIM_FLAG_Update))            //判断发生update事件中断  
@@ -76,6 +89,7 @@ void TIM2_IRQHandler()
 		{
 				TIM_ClearITPendingBit(TIM2, TIM_IT_CC4);
 				ADC_SoftwareStartConvCmd(ADC1, ENABLE);		//使能指定的ADC1的软件转换启动功能	
+			TIM_SetCounter(TIM4,0x00);
 				//GPIO_WriteBit(GPIOA, GPIO_Pin_10, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_10)));
 		}
 }  
@@ -111,7 +125,7 @@ void TIM3_IRQHandler(void)
     { 
 				timenum++;
 				//GPIOB->ODR ^= GPIO_Pin_8;
-				if(timenum%10==0) /*120us*10us=1200us*/
+				if(timenum%10==0) /*10us*100us=1000us*/
 				{
 					//GPIOB->ODR ^= GPIO_Pin_8;
 					if(OUT2)
@@ -126,12 +140,12 @@ void TIM3_IRQHandler(void)
 					else
 						ShortCircuitCounter=0;
 				}
-				if(timenum%80==0)/*120us*100us=12000us*/
+				if(timenum%80==0)/*80us*100us=8000us*/
 				{
 					Key_Scan();									//定时扫描按键
 					tempPress=1;
 				}
-				if(timenum>=5000)	/*5000*10us = 500,000us = 500ms*/
+				if(timenum>=5000)	/*5000*100us = 500,000us = 500ms*/
 				{
 					GetADCValue();
 					timeflag=!timeflag;
@@ -151,6 +165,7 @@ void bsp_init(void)
 		PWR_PVDLevelConfig(PWR_PVDLevel_2V9);/*设置PVD电压检测*/
     PWR_PVDCmd(ENABLE);
 		TIM3_init();
+		TIM4_init();
 		ADC1_Configuration();
 	
 		RCC_GetClocksFreq(&SysClock);

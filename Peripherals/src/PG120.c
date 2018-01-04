@@ -21,6 +21,7 @@
 #include "menu.h"
 #include "flash.h"
 #include "stm32f10x_dma.h"
+#include "stm32f10x_tim.h"
 /*DSP库宏定义：ARM_MATH_CM0*/
 
 
@@ -85,23 +86,23 @@ extern uint8_t SelftStudyflag;
 
 uint8_t DustFlag=0;
 
-uint32_t 	S[4];
+int32_t 	S[4];
 uint8_t 	S_Index=0;
 uint8_t 	S_Flag=0;
 
-uint32_t 	SX[4];
+int32_t 	SX[4];
 int32_t 	SX_Final[32];
 uint8_t 	SX_Flag;
 uint8_t 	SX_Index=0;
 
 
-uint32_t 	S_Final=0; /*S-SET*/
+int32_t 	S_Final=0; /*S-SET*/
 uint8_t 	S_Final_FinishFlag=0;
 
 uint32_t 	S32=0;
 uint8_t 	S32_Flag=0;
 
-uint32_t 	S_SET=0;
+int32_t 	S_SET=0;
 uint32_t 	S_Selft=0;
 
 int16_t 	Threshold=1000;
@@ -113,7 +114,7 @@ uint8_t		DX_Flag=1;
 
 uint8_t 	TX_Index=0;
 int32_t 	TX=0;
-uint32_t 	TX_Signal[8];
+int32_t 	TX_Signal[8];
 int16_t 	FX=0;
 
 uint32_t 	Display_Signal[256];
@@ -262,6 +263,9 @@ void JudgeDX(void)
 	}
 }
 
+uint16_t  RunCounter[100];
+uint8_t		Runflag=0;
+uint8_t		RunIndex=0;
 void DMA1_Channel1_IRQHandler(void)
 {
 	uint32_t 	SX_Max=0;
@@ -288,7 +292,7 @@ void DMA1_Channel1_IRQHandler(void)
 		S_Flag = 1;
 		
 		if(S_Index>3)	
-		{
+		{					
 				S_Index = 0;
 				/*SX,FX*/
 				tempdata = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min);
@@ -307,6 +311,12 @@ void DMA1_Channel1_IRQHandler(void)
 					S_Final=0;
 				S_Final_FinishFlag = 1;
 			
+								
+				if(PWMCounter>50)/*大于等于50个PWM脉冲，才开始计算RegisterA*/
+					SetRegisterA(S_Final);/*判断RegisterA的状态*/
+				if(PWMCounter>80)
+					SetOUT1Status();/*大于等于50个PWM脉冲，才开始设置OUT输出*/
+				
 				FX = (SX_Max-SX_Min);  /*求得FX*/
 				ClearData(SX,4);/*清零*/
 			
@@ -334,11 +344,7 @@ void DMA1_Channel1_IRQHandler(void)
 					DisplayADCValue_Sum = 0;
 					
 				}
-				
-				if(PWMCounter>50)/*大于等于50个PWM脉冲，才开始计算RegisterA*/
-					SetRegisterA(S_Final);/*判断RegisterA的状态*/
-				if(PWMCounter>80)
-					SetOUT1Status();/*大于等于50个PWM脉冲，才开始设置OUT输出*/
+
 				/*根据CPV，设置OUT输出*/
 				CPV_SET_OUT();
 				/*判断灰层*/
@@ -363,6 +369,11 @@ void DMA1_Channel1_IRQHandler(void)
 						WriteFlash(S_SET_FLASH_DATA_ADDRESS,S_SET);
 					}
 				}
+				/*计算时间*/
+				RunCounter[RunIndex] = TIM_GetCounter(TIM4);
+				if(RunCounter[RunIndex] >=3200)
+					Runflag = 1;
+				RunIndex++;
 		}
 	}
 	/*清除DMA中断标志位*/	
@@ -430,16 +441,6 @@ void PG120_Function(void)
 		}
 		else
 		{
-//				/*正常显示*/
-//				if(SX_Flag)
-//				{
-//					SX_Flag = 0;
-//					if(EventFlag&Blink500msFlag) 
-//					{
-//						EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-//						ADC_Display = ADCDispalyProcess(SX_Final,32);
-//					}
-//				}
 
 				/*短路保护*/
 				ShortCircuitProtection();
@@ -449,7 +450,7 @@ void PG120_Function(void)
 						GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,Bit_RESET);
 						GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,Bit_RESET);/*马上拉低OUT*/ /*发现短路，将OUT引脚拉低*/
 						GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*马上拉低OUT*/ /*发现短路，将OUT引脚拉低*/
-						if((ShortCircuitLastTime - ShortCircuitTimer)>=20000)
+						if((ShortCircuitLastTime - ShortCircuitTimer)>=2000)
 						{
 								ConfirmShortCircuit = 0;
 								ShortCircuitCounter = 0;
