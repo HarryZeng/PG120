@@ -54,7 +54,9 @@ void EraseFlash(void)
 	InitInternalFlash(HI_FLASH_DATA_ADDRESS);
 	InitInternalFlash(LO_FLASH_DATA_ADDRESS);
 	InitInternalFlash(DETECT_FLASH_DATA_ADDRESS);
-	
+	InitInternalFlash(PERCENTAGE_FLASH_DATA_ADDRESS);
+	InitInternalFlash(S_SET_FLASH_DATA_ADDRESS);
+	InitInternalFlash(DSC_FLASH_DATA_ADDRESS);
 }
 
 /******************************************

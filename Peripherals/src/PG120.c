@@ -44,7 +44,7 @@ uint16_t OUT2_Timer=0;
 int16_t 	OUT3_TimerCounter=0;
 uint16_t OUT3_Timer=0;
 uint32_t ADCRawValue=0;
-uint32_t ADC_Display=0;
+int32_t ADC_Display=0;
 int32_t DACOUT = 1000;
 uint32_t CPV = 0;
 
@@ -82,6 +82,7 @@ extern int16_t ATT100;
 extern uint16_t FSV;
 extern int32_t SV;
 extern uint8_t SelftStudyflag;
+extern int8_t DSC;
 /*----------------------------------宏定义-------------------------------------*/
 
 uint8_t DustFlag=0;
@@ -208,6 +209,7 @@ uint32_t S1024=0;
 uint16_t S1024_Index=0;
 uint32_t S1024_Sum=0;
 
+#define S1024_Or_S8192  1024
 void JudgeDX(void)
 {
 		/*判断灰层影响程度*/
@@ -219,17 +221,22 @@ void JudgeDX(void)
 			//S1024_Sum = S1024_Sum + S_Final;
 			S1024_Sum = S1024_Sum + SX_Final[SX_Index];
 			S1024_Index++;
-			if(S1024_Index>=1024)
+			if(S1024_Index>=S1024_Or_S8192)
 			{
 				S1024_Index = 0;
-				S1024 = S1024_Sum / 1024; //求得S1024
-				DX = S_SET - S1024;					//modifiy 20171230
+				S1024 = S1024_Sum / S1024_Or_S8192; //求得S1024
+				
+				if(DSC)                 //modifiy 20180105
+					DX = S_SET - S1024;					//modifiy 20171230
+				else
+					DX = 0;   
+				
 				S1024_Sum  = 0;
 			}
-			if(DX<=-1500) //有疑问，当最小是-1500时，没有比它更小的了
-				DX=-1500;
-			if(DX>=1500) 
-				DX = 1500;   
+			if(DX<=-2000) //有疑问，当最小是-1500时，没有比它更小的了
+				DX=-2000;
+			else if(DX>=2000) 
+				DX = 2000;   
 //			
 //			Last_DX = DX;
 //			
@@ -243,15 +250,23 @@ void JudgeDX(void)
 	{
 		if(RegisterC) 
 		{
-			S1024_Sum = S1024_Sum + S_Final;
+			//S1024_Sum = S1024_Sum + S_Final;
+			S1024_Sum = S1024_Sum + SX_Final[SX_Index];
 			S1024_Index++;
-			if(S1024_Index>=1024)
+			if(S1024_Index>=S1024_Or_S8192)
 			{
-				S1024 = S1024_Sum / 1024; //求得S1024
-				DX = S_SET - S1024;					//modifiy 20171230
+				S1024_Index = 0;
+				S1024 = S1024_Sum / S1024_Or_S8192; //求得S1024
+				if(DSC)                 //modifiy 20180105
+					DX = S_SET - S1024;					//modifiy 20171230
+				else
+					DX = 0; 
+				S1024_Sum  = 0;
 			}
-			if(DX<=-1500) DX=-1500;
-			if(DX>=1500) DX = 1500;   
+			if(DX<=-2000) //有疑问，当最小是-1500时，没有比它更小的了
+				DX=-2000;
+			else if(DX>=2000) 
+				DX = 2000; 
 //			
 //			Last_DX = DX;
 //			
@@ -332,7 +347,7 @@ void DMA1_Channel1_IRQHandler(void)
 				}
 				
 				/*显示数据计数*/
-				GetSum(&DisplayADCValue_Sum,&S_Final,1);/*八次总和,TX*/
+				GetSum(&DisplayADCValue_Sum,&S_Final,1);
 				Display_Signal_Index++;
 				if(Display_Signal_Index>=255)
 				{
@@ -360,6 +375,7 @@ void DMA1_Channel1_IRQHandler(void)
 					if(SelftStudyflag)
 					{
 						DX = 0;
+						S1024 = 0;
 						//GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
 						//Threshold = S_SET-80;   /*更新阀值*/
 						S_SET = S_Final;
@@ -634,7 +650,6 @@ void DisplayModeONE_STD(void)
 			UpButton.PressCounter = 0;
 			if(UpButton.PressTimer<=KEY_LEVEL_1)
 			{
-				
 				if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
 				{
 					Threshold = Threshold+1;
@@ -735,8 +750,8 @@ void DisplayModeONE_AREA(void)
 						lastCounter = UpButton.PressCounter;
 						UpButton.PressCounter = 0;
 						HI = HI+1;
-					if(HI>=4000)
-							HI = 4000;
+						if(HI>=9999)
+								HI = 9999;
 						SMG_DisplayModeONE_Detect_AREA_HI(1,HI,ADC_Display); /*显示阀值*/
 					}
 					else 	if(UpButton.Status==Press&&(UpButton.Effect==PressLong))
@@ -766,22 +781,22 @@ void DisplayModeONE_AREA(void)
 								HI = HI+5;
 							}
 						}
-					if(HI>=4000)
-							HI = 4000;
+					if(HI>=9999)
+							HI = 9999;
 						SMG_DisplayModeONE_Detect_AREA_HI(1,HI,ADC_Display); /*显示阀值*/
 					}	
-					else
-					{
-						UpButton.Effect = PressShort;
-						SMG_DisplayModeONE_Detect_AREA_HI(timeflag,HI,ADC_Display); /*交替显示HI与阀值*/
-					}
+//					else
+//					{
+//						UpButton.Effect = PressShort;
+//						SMG_DisplayModeONE_Detect_AREA_HI(timeflag,HI,ADC_Display); /*交替显示HI与阀值*/
+//					}
 						/*Down Button*/
-					if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
+					else if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
 					{
 						DownButton.PressCounter = 0;
 						HI = HI-1;
-						if(HI<=100)
-							HI = 100;
+						if(HI<=0)
+							HI = 0;
 						SMG_DisplayModeONE_Detect_AREA_HI(1,HI,ADC_Display); /*显示阀值*/
 					}
 					else if(DownButton.Status==Press&&(DownButton.Effect==PressLong))
@@ -811,8 +826,8 @@ void DisplayModeONE_AREA(void)
 								HI = HI-5;
 							}
 						}
-						if(HI<=100)
-							HI = 100;
+						if(HI<=0)
+							HI = 0;
 						SMG_DisplayModeONE_Detect_AREA_HI(1,HI,ADC_Display); /*显示阀值*/
 					}
 					else
@@ -839,6 +854,8 @@ void DisplayModeONE_AREA(void)
 						lastCounter = UpButton.PressCounter;
 						UpButton.PressCounter = 0;
 						LO = LO+1;
+						if(LO>=9999)
+							LO = 9999;
 						SMG_DisplayModeONE_Detect_AREA_LO(1,LO,ADC_Display);/*显示阀值*/
 					}
 					else 	if(UpButton.Status==Press&&(UpButton.Effect==PressLong))
@@ -868,18 +885,22 @@ void DisplayModeONE_AREA(void)
 								LO = LO + 5;
 							}
 						}
+						if(LO>=9999)
+							LO = 9999;						
 						SMG_DisplayModeONE_Detect_AREA_LO(1,LO,ADC_Display);/*显示阀值*/
 					}	
-					else
-					{
-						UpButton.Effect = PressShort;
-						SMG_DisplayModeONE_Detect_AREA_LO(timeflag,LO,ADC_Display);/*交替显示LO与阀值*/
-					}
+//					else
+//					{
+//						UpButton.Effect = PressShort;
+//						SMG_DisplayModeONE_Detect_AREA_LO(timeflag,LO,ADC_Display);/*交替显示LO与阀值*/
+//					}
 						/*Down Button*/
-					if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
+					else if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
 					{
 						DownButton.PressCounter = 0;
 						LO = LO-1;
+						if(LO<=0)
+							LO = 0;
 						SMG_DisplayModeONE_Detect_AREA_LO(1,LO,ADC_Display);/*显示阀值*/
 					}
 					else if(DownButton.Status==Press&&(DownButton.Effect==PressLong))
@@ -909,6 +930,8 @@ void DisplayModeONE_AREA(void)
 								LO = LO - 5;
 							}
 						}
+						if(LO<=0)
+							LO = 0;
 						SMG_DisplayModeONE_Detect_AREA_LO(1,LO,ADC_Display);/*显示阀值*/
 					}
 					else
@@ -920,10 +943,6 @@ void DisplayModeONE_AREA(void)
 					{
 						WriteFlash(LO_FLASH_DATA_ADDRESS,LO);
 					}
-					if(LO>=4000)
-							LO = 4000;
-					else if(LO<=100)
-							LO = 100;
 				}
 			}
 	
@@ -1393,6 +1412,7 @@ void GetEEPROM(void)
 			displayModeONE_FLAG 	= ReadFlash(DETECT_FLASH_DATA_ADDRESS);
 			PERCENTAGE 						= ReadFlash(PERCENTAGE_FLASH_DATA_ADDRESS);
 			S_SET 								= ReadFlash(S_SET_FLASH_DATA_ADDRESS);
+			DSC 									= ReadFlash(DSC_FLASH_DATA_ADDRESS);
 }
 
 /*****************************
@@ -1414,6 +1434,7 @@ void ResetParameter(void)
 		LO = 700 ;
 		displayModeONE_FLAG = 0;
 		PERCENTAGE = 1;
+		DSC = 1;
 		
 		WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
 		Test_Delay(50); 
@@ -1440,6 +1461,8 @@ void ResetParameter(void)
 		WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
 		Test_Delay(50);
 		WriteFlash(S_SET_FLASH_DATA_ADDRESS,S_SET);
+		Test_Delay(50);
+		WriteFlash(DSC_FLASH_DATA_ADDRESS,DSC);
 		
 		ModeButton.Effect=PressNOEffect;
 		ModeButton.PressTimer = 0;

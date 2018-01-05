@@ -1114,6 +1114,31 @@ void SMG_DisplayPERCENTAGE(int16_t PERCENTAGE_Value)
 }
 
 
+/*DSC 菜单*/
+void SMG_DisplayMenuDSC(int16_t DSC)
+{ 
+		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];					//D1	none
+		SMG_data_Decode_table[0][5]=data_SMG_seg_table[12];					//D2	C
+		SMG_data_Decode_table[0][6]=data_SMG_seg_table[20];					//D3	S
+		SMG_data_Decode_table[0][7]=data_SMG_seg_table[13];					//D4	D
+	
+	if(DSC)
+	{
+		SMG_data_Decode_table[0][0]=data_SMG_seg_table[22];					//D5		none
+		SMG_data_Decode_table[0][1]=data_SMG_seg_table[18];					//D6		n
+		SMG_data_Decode_table[0][2]=data_SMG_seg_table[17];					//D7		o
+		SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];					//D8		none
+	}
+	else
+	{
+		SMG_data_Decode_table[0][0]=data_SMG_seg_table[15];					//D5	f
+		SMG_data_Decode_table[0][1]=data_SMG_seg_table[15];					//D6	f	
+		SMG_data_Decode_table[0][2]=data_SMG_seg_table[17];					//D7	o
+		SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];					//D8  none
+	}
+		
+}
+
 /***********************************************************************
 *
 *数码管的基本操作函数

@@ -24,10 +24,12 @@ int32_t SV = 900; 		/*接近final Value*/
 uint16_t FSV = 1000;	/*FINAL SET VALUE*/
 int16_t ATT100=100;
 int8_t PERCENTAGE=1;
-
+int8_t DSC=1;
 
 OUT1_DELAY_MODE_STRUCT OUT1_Mode={TOFF,10};
 int8_t DispalyNo=0;
+/*DSC  菜单*/
+void Menu_DSC(void);
 /*ATT100设定菜单*/
 void MenuOne_ATT100(void);
 /*PERCENTAGE设定菜单*/
@@ -71,6 +73,11 @@ void menu(void)
 				
 				while(ModeButton.PressCounter==3)
 				{
+					Menu_DSC();
+				}
+				
+				while(ModeButton.PressCounter==4)
+				{
 					/*DETECT*//*数码管显示*/
 					SMG_DisplayModeDETECT(displayModeONE_FLAG);
 					/*******************************/
@@ -99,20 +106,20 @@ void menu(void)
 				}
 				
 				
-				while(ModeButton.PressCounter==4)
+				while(ModeButton.PressCounter==5)
 				{
 					/*SV COUNTER设定菜单*/
 					MenuOne_SV();
 				}
 				
-				while(ModeButton.PressCounter==5)
+				while(ModeButton.PressCounter==6)
 				{
 					/*FSV COUNTER设定菜单*/
 					MenuOne_FSV();
 				}
 				
 				/*显示先前定时器选定菜单*/
-				if(ModeButton.PressCounter==6 && ModeButton.Effect==PressShort)
+				if(ModeButton.PressCounter==7 && ModeButton.Effect==PressShort)
 				{
 					if(OUT1_Mode.DelayMode == TOFF)
 						DispalyNo = 0;
@@ -123,16 +130,16 @@ void menu(void)
 					else if(OUT1_Mode.DelayMode == SHOT)
 						DispalyNo = 3;
 				}
-				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==6)
+				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==7)
 				{
 						MenuTwo_OUT1_DelaySET();
 				}
-				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==7)
+				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==8)
 				{
 						END_Display();
 						DX_Flag = 1;
 						/*再短按MODE，则退出菜单*/
-						if(ModeButton.Effect==PressShort && ModeButton.PressCounter>=8) 
+						if(ModeButton.Effect==PressShort && ModeButton.PressCounter>=9) 
 						{
 							ModeButton.PressCounter = 0;
 							ModeButton.Status = Release;
@@ -362,6 +369,41 @@ void Menu_PERCENTAGE(void)
 		{
 			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
 			WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
+		}
+}
+
+/*******************************
+*
+*菜单显示 DSC
+*
+*******************************/
+void Menu_DSC(void)
+{
+	static uint8_t lastCounter;
+		/*数码管显示*/
+		SMG_DisplayMenuDSC(DSC);
+	
+		/*Up Button*/
+		if(UpButton.PressCounter !=lastCounter && UpButton.Effect==PressShort)
+		{
+			lastCounter = UpButton.PressCounter;
+			UpButton.PressCounter = 0;
+			if(DSC==0)
+				DSC = 1;
+			else 
+				DSC=0;
+			WriteFlash(DSC_FLASH_DATA_ADDRESS,DSC);
+		}
+
+		/*Down Button*/
+		if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
+		{
+			DownButton.PressCounter = 0;
+			if(DSC==0)
+				DSC = 1;
+			else 
+				DSC=0;
+			WriteFlash(DSC_FLASH_DATA_ADDRESS,DSC);
 		}
 }
 

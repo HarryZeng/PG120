@@ -514,6 +514,8 @@ void SMG_DisplayATT100(int16_t ATT100Value,uint32_t ADCValue);
 void SMG_DisplayPERCENTAGE(int16_t PERCENTAGE_Value);
 /*按键复用显示*/
 void ButtonMappingDisplay(uint8_t MappingFlag);
+/*DSC 菜单*/
+void SMG_DisplayMenuDSC(int16_t DSC);
 
 /*内部函数*/
 void SMG_data_update(void);

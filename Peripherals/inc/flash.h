@@ -26,6 +26,8 @@
 #define 	DETECT_FLASH_DATA_ADDRESS 	 										FLASH_Base_ADDRESS+0x2C00	 
 #define 	PERCENTAGE_FLASH_DATA_ADDRESS 	 								FLASH_Base_ADDRESS+0x3000
 #define 	S_SET_FLASH_DATA_ADDRESS 	 											FLASH_Base_ADDRESS+0x3400
+#define 	DSC_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+0x3800
+
 
 typedef  struct FLASH_CHANNEL
 {
