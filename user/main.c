@@ -124,6 +124,9 @@ void TIM3_IRQHandler(void)
 	  if(TIM_GetITStatus(TIM3, TIM_IT_Update))            //判断发生update事件中断  
     { 
 				timenum++;
+				
+				OUT1_Mode.DelayCounter++;
+			
 				//GPIOB->ODR ^= GPIO_Pin_8;
 				if(timenum%10==0) /*10us*100us=1000us*/
 				{

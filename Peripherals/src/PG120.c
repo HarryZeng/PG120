@@ -26,7 +26,7 @@
 
 
 
-uint32_t DealyBaseTime=23;
+uint32_t DealyBaseTime=8;
 uint16_t DEL = 4;
 
 int16_t HI = 1000;
@@ -185,6 +185,7 @@ void ClearData(uint32_t *ary,uint8_t Length)
 /*记录CPV并设置OUT的输出*/
 void CPV_SET_OUT(void)
 {
+		//uint8_t OUT1_LED,OUT2_LED,OUT3_LED;
 		if(LastOUT1==0&&OUT1==1)
 		{
 			CPV++;
@@ -200,7 +201,7 @@ void CPV_SET_OUT(void)
 			}
 		}
 		LastOUT1 = OUT1;
-		/*显示OUT1和OUT2的状态*/
+//		/*显示OUT1和OUT2的状态*/
 		SMG_DisplayOUT_STATUS(OUT1,OUT2,OUT3);
 }
 
@@ -350,11 +351,9 @@ void DMA1_Channel1_IRQHandler(void)
 				/*显示数据计数*/
 				GetSum(&DisplayADCValue_Sum,&S_Final,1);
 				Display_Signal_Index++;
-				if(Display_Signal_Index>=255)
+				if(Display_Signal_Index>=256)
 				{
-					//ADC_Display = DeleteMaxAndMinGetAverage(&DisplayADCValue_Sum,1,&Dispaly_Max,&Dispaly_Min);
 					ADCRawValue = DisplayADCValue_Sum/256;
-					//ADC_Display = ADCRawValue;
 					Display_Signal_Index = 0;
 					Display_Signal_Flag	=	1;
 					DisplayADCValue_Sum = 0;
@@ -380,20 +379,27 @@ void DMA1_Channel1_IRQHandler(void)
 						//GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
 						//Threshold = S_SET-80;   /*更新阀值*/
 						S_SET = S_Final;
-						Threshold = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/
-						if(displayModeONE_FLAG)
+						
+						if(displayModeONE_FLAG)//区域模式
 						{
 							if(DisplayModeNo==0)
 							{
-								HI = Threshold;
+								HI = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/;
+								WriteFlash(HI_FLASH_DATA_ADDRESS,HI);
 							}
 							else if(DisplayModeNo==1)
 							{
-								LO =Threshold;
+								LO =S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/;
+								WriteFlash(LO_FLASH_DATA_ADDRESS,LO);
 							}
 						}
+						else    //标准模式
+						{
+							Threshold = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/
+							WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
+						}
 						SelftStudyflag = 0;
-						WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
+						
 						WriteFlash(S_SET_FLASH_DATA_ADDRESS,S_SET);
 					}
 				}
@@ -1167,7 +1173,7 @@ void SetOUT1Status(void)
 		if(OUT1_Mode.DelayMode==TOFF)
 		{
 			//GPIOA->ODR ^= GPIO_Pin_9;
-			if(OUT1)
+			if(OUT1==0)
 			{
 				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_SET);
 				OUT1_Mode.DelayCounter = 0;
@@ -1181,7 +1187,7 @@ void SetOUT1Status(void)
 		/*OFFD*/
 		else if(OUT1_Mode.DelayMode==OFFD)
 		{
-			if(OUT1)
+			if(OUT1==0)
 			{
 				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_SET);
 				OUT1_Mode.DelayCounter = 0;
@@ -1197,7 +1203,7 @@ void SetOUT1Status(void)
 		/*ON_D*/
 		else if(OUT1_Mode.DelayMode==ON_D)
 		{
-			if(OUT1)
+			if(OUT1==0)
 			{
 				if(OUT1_Mode.DelayCounter>(OUT1_Mode.DelayValue*DealyBaseTime))
 				{
@@ -1213,7 +1219,7 @@ void SetOUT1Status(void)
 		/*SHOT*/
 		else if(OUT1_Mode.DelayMode==SHOT)
 		{
-			if(OUT1 || SHOTflag == 1)
+			if(OUT1==0 || SHOTflag == 1)
 			{
 				if(OUT1_Mode.DelayCounter<(OUT1_Mode.DelayValue*DealyBaseTime))
 				{
@@ -1461,7 +1467,7 @@ void ResetParameter(void)
 		LO = 700 ;
 		displayModeONE_FLAG = 0;
 		PERCENTAGE = 1;
-		DSC = 0;
+		DSC = 1;
 		
 		WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
 		Test_Delay(50); 

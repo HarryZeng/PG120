@@ -45,11 +45,12 @@ void MenuTwo_OUT1_SHOT(void);
 extern uint8_t  displayModeONE_FLAG;
 extern uint32_t tempPress;
 extern uint8_t DX_Flag;
+extern int16_t 	DX;
+extern uint32_t S1024;
 void menu(void)
 {
 	static uint8_t lastCounter;
 	/*Mode按键第一次按下,超过长按时间*/
-	lastCounter = ModeButton.PressCounter;
 	if((DownButton.Status==Press && ModeButton.Status ==Press )|| SetButton.Status == Press||UpButton.Status==Press)
 	{
 		
@@ -59,7 +60,10 @@ void menu(void)
 		while(((ModeButton.Status==Press&&(ModeButton.PressTimer>=ModeButton.LongTime)) || (ModeButton.Effect==PressLong)))//&&DownButton.Status==Release)
 		{
 				DX_Flag = 0;
+				DX = 0;
+				S1024 = 0;
 				ModeButton.PressCounter = 0;
+				UpButton.PressCounter = 0;
 				MenuOne_ATT100();   
 				while(ModeButton.PressCounter==1)
 				{
@@ -82,7 +86,7 @@ void menu(void)
 					SMG_DisplayModeDETECT(displayModeONE_FLAG);
 					/*******************************/
 					/*Up Button*/
-					if(UpButton.PressCounter !=lastCounter && UpButton.Effect==PressShort)
+					if((UpButton.PressCounter !=lastCounter)&&(UpButton.Effect==PressShort))
 					{
 						lastCounter = UpButton.PressCounter;
 						UpButton.PressCounter = 0;
@@ -94,7 +98,7 @@ void menu(void)
 					}
 
 					/*Down Button*/
-					if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
+					else if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
 					{
 						DownButton.PressCounter = 0;
 						if(displayModeONE_FLAG==0)
@@ -134,12 +138,12 @@ void menu(void)
 				{
 						MenuTwo_OUT1_DelaySET();
 				}
-				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==8)
+				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==9)
 				{
 						END_Display();
 						DX_Flag = 1;
 						/*再短按MODE，则退出菜单*/
-						if(ModeButton.Effect==PressShort && ModeButton.PressCounter>=9) 
+						if(ModeButton.Effect==PressShort && ModeButton.PressCounter>=10) 
 						{
 							ModeButton.PressCounter = 0;
 							ModeButton.Status = Release;
@@ -649,7 +653,11 @@ void MenuTwo_OUT1_DelaySET(void)
 				if(DispalyNo<0)
 					DispalyNo = 3;
 			}
-			if(ModeButton.PressCounter>5) break;
+			if(ModeButton.PressCounter>=8) 
+			{
+				ModeButton.PressCounter = 9; //用于跳到END菜单
+				break;
+			}
 		}
 		
 		/*OFFD mode*/
@@ -672,7 +680,7 @@ void MenuTwo_OUT1_DelaySET(void)
 					if(DispalyNo<0)
 						DispalyNo = 3;
 				}
-				if(ModeButton.PressCounter>6) break;
+				if(ModeButton.PressCounter>8) break;
 		}
 		/*ON_D mode*/
 		while(DispalyNo==2)
@@ -694,7 +702,7 @@ void MenuTwo_OUT1_DelaySET(void)
 					if(DispalyNo<0)
 						DispalyNo = 3;
 				}
-				if(ModeButton.PressCounter>6) break;
+				if(ModeButton.PressCounter>8) break;
 		}
 		while(DispalyNo==3)
 		{
@@ -715,7 +723,7 @@ void MenuTwo_OUT1_DelaySET(void)
 					if(DispalyNo<0)
 						DispalyNo = 3;
 				}
-				if(ModeButton.PressCounter>6) break;
+				if(ModeButton.PressCounter>8) break;
 		}
 		
 //		while(DispalyNo==4)
@@ -768,7 +776,7 @@ void MenuTwo_OUT1_TOFF(void)
 void MenuTwo_OUT1_OFFD(void)
 {
 		static uint8_t lastCounter;
-	
+		uint8_t Flashflag=0;
 		if(EventFlag&Blink500msFlag) 
 		{
 			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
@@ -776,7 +784,7 @@ void MenuTwo_OUT1_OFFD(void)
 			SMG_DisplayMenuTwo_OFFD();
 		}
 		/*短按MODE后，进入OFFD的设置子菜单*/
-		while(ModeButton.Effect==PressShort && ModeButton.PressCounter==6)
+		while(ModeButton.Effect==PressShort && ModeButton.PressCounter==8)
 		{
 			OUT1_Mode.DelayMode = OFFD;
 			/*显示OFFD value*/
@@ -800,24 +808,37 @@ void MenuTwo_OUT1_OFFD(void)
 				lastCounter = UpButton.PressCounter;
 				UpButton.PressCounter = 0;
 				OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+				Flashflag = 1;
 			}
 			else 	if(UpButton.Status==Press&&(UpButton.Effect==PressLong))
 			{				/*还按着按键，并且时间超过长按时间*/
 				UpButton.PressCounter = 0;
 				if(UpButton.PressTimer<KEY_LEVEL_1)
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<KEY_LEVEL_2)
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else 
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 			}	
 			else
@@ -829,24 +850,37 @@ void MenuTwo_OUT1_OFFD(void)
 			{
 				DownButton.PressCounter = 0;
 				OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+				Flashflag = 1;
 			}
 			else if(DownButton.Status==Press&&(DownButton.Effect==PressLong))
 			{				/*还按着按键，并且时间超过长按时间*/
 				DownButton.PressCounter = 0;
 				if(DownButton.PressTimer<KEY_LEVEL_1)
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else 
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 			}	
 			else
@@ -857,6 +891,15 @@ void MenuTwo_OUT1_OFFD(void)
 				OUT1_Mode.DelayValue = 9999;
 			else if(OUT1_Mode.DelayValue<=0)
 					OUT1_Mode.DelayValue = 0;
+			
+			if(EventFlag&Blink500msFlag && Flashflag==1) 
+			{
+				Flashflag = 0;
+				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+			}
+			
 		}
 }
 
@@ -867,7 +910,8 @@ void MenuTwo_OUT1_OFFD(void)
 *******************************/
 void MenuTwo_OUT1_ON_D(void)
 {
-	static uint8_t lastCounter;
+		static uint8_t lastCounter;
+		uint8_t Flashflag=0;
 		if(EventFlag&Blink500msFlag) 
 		{
 			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
@@ -875,7 +919,7 @@ void MenuTwo_OUT1_ON_D(void)
 			SMG_DisplayMenuTwo_ON_Delay();
 		}
 		/*短按MODE后，进入ON_D的设置子菜单*/
-		while(ModeButton.Effect==PressShort && ModeButton.PressCounter==6)
+		while(ModeButton.Effect==PressShort && ModeButton.PressCounter==8)
 		{
 			OUT1_Mode.DelayMode = ON_D;
 			/*显示ON_D value*/
@@ -900,24 +944,37 @@ void MenuTwo_OUT1_ON_D(void)
 				lastCounter = UpButton.PressCounter;
 				UpButton.PressCounter = 0;
 				OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+				Flashflag = 1;
 			}
 			else 	if(UpButton.Status==Press&&(UpButton.Effect==PressLong))
 			{				/*还按着按键，并且时间超过长按时间*/
 				UpButton.PressCounter = 0;
 				if(UpButton.PressTimer<KEY_LEVEL_1)
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<KEY_LEVEL_2)
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else 
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 			}	
 			else
@@ -929,25 +986,37 @@ void MenuTwo_OUT1_ON_D(void)
 			{
 				DownButton.PressCounter = 0;
 				OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
-
+				Flashflag = 1;
 			}
 			else if(DownButton.Status==Press&&(DownButton.Effect==PressLong))
 			{				/*还按着按键，并且时间超过长按时间*/
 				DownButton.PressCounter = 0;
 				if(DownButton.PressTimer<KEY_LEVEL_1)
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else 
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 			}	
 			else
@@ -959,6 +1028,13 @@ void MenuTwo_OUT1_ON_D(void)
 				OUT1_Mode.DelayValue = 9999;
 			else if(OUT1_Mode.DelayValue<=0)
 					OUT1_Mode.DelayValue = 0;
+			if(EventFlag&Blink500msFlag && Flashflag==1) 
+			{
+				Flashflag = 0;
+				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+			}
 		}
 }
 
@@ -971,6 +1047,7 @@ void MenuTwo_OUT1_ON_D(void)
 void MenuTwo_OUT1_SHOT(void)
 {
 		static uint8_t lastCounter;
+		uint8_t Flashflag=0;
 		if(EventFlag&Blink500msFlag) 
 		{
 			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
@@ -978,7 +1055,7 @@ void MenuTwo_OUT1_SHOT(void)
 			SMG_DisplayMenuTwo_SHOT();
 		}
 		/*短按MODE后，进入SHOT的设置子菜单*/
-		while(ModeButton.Effect==PressShort && ModeButton.PressCounter==6)
+		while(ModeButton.Effect==PressShort && ModeButton.PressCounter==8)
 		{
 			OUT1_Mode.DelayMode = SHOT;
 			/*显示SHOT value*/			
@@ -1003,24 +1080,37 @@ void MenuTwo_OUT1_SHOT(void)
 				lastCounter = UpButton.PressCounter;
 				UpButton.PressCounter = 0;
 				OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+				Flashflag = 1;
 			}
 			else 	if(UpButton.Status==Press&&(UpButton.Effect==PressLong))
 			{				/*还按着按键，并且时间超过长按时间*/
 				UpButton.PressCounter = 0;
 				if(UpButton.PressTimer<KEY_LEVEL_1)
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_1_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else if(UpButton.PressTimer>KEY_LEVEL_1&&UpButton.PressTimer<KEY_LEVEL_2)
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_2_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else 
 				{
-					if(UpButton.PressTimer%KEY_LEVEL_3_SET==0)
+					if(UpButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue+1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 			}	
 			else
@@ -1032,24 +1122,37 @@ void MenuTwo_OUT1_SHOT(void)
 			{
 				DownButton.PressCounter = 0;
 				OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+				Flashflag = 1;
 			}
 			else if(DownButton.Status==Press&&(DownButton.Effect==PressLong))
 			{				/*还按着按键，并且时间超过长按时间*/
 				DownButton.PressCounter = 0;
 				if(DownButton.PressTimer<KEY_LEVEL_1)
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_1_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_1_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else if(DownButton.PressTimer>KEY_LEVEL_1&&DownButton.PressTimer<KEY_LEVEL_2)
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_2_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_2_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 				else 
 				{
-					if(DownButton.PressTimer%KEY_LEVEL_3_SET==0)
+					if(DownButton.PressTimer%KEY_LEVEL_3_SET==0&&tempPress == 1)
+					{
 						OUT1_Mode.DelayValue = OUT1_Mode.DelayValue-1;
+						Flashflag = 1;
+						tempPress = 0;
+					}
 				}
 			}	
 			else
@@ -1061,6 +1164,13 @@ void MenuTwo_OUT1_SHOT(void)
 				OUT1_Mode.DelayValue = 9999;
 			else if(OUT1_Mode.DelayValue<=0)
 					OUT1_Mode.DelayValue = 0;
+			if(EventFlag&Blink500msFlag && Flashflag==1) 
+			{
+				Flashflag = 0;
+				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+			}
 		}
 }
 
