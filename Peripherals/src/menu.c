@@ -360,8 +360,8 @@ void Menu_PERCENTAGE(void)
 		DownButton.Effect = PressShort;
 	}
 	
-	if(PERCENTAGE<=1)
-			PERCENTAGE =1;
+	if(PERCENTAGE<=0)
+			PERCENTAGE =0;
 	else if(PERCENTAGE>=50)
 			PERCENTAGE =50;
 	

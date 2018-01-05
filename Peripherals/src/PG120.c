@@ -57,6 +57,7 @@ uint8_t  		EventFlag=0x00;
 uint8_t 		ShortCircuit=0;
 uint32_t 		ShortCircuitTimer=0;
 uint8_t  		displayModeONE_FLAG = 0; 
+uint8_t 		DisplayModeNo=0;
 
 void SetRegisterA(uint32_t GetADCValue);
 void DisplayMODE(void);
@@ -380,6 +381,17 @@ void DMA1_Channel1_IRQHandler(void)
 						//Threshold = S_SET-80;   /*更新阀值*/
 						S_SET = S_Final;
 						Threshold = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/
+						if(displayModeONE_FLAG)
+						{
+							if(DisplayModeNo==0)
+							{
+								HI = Threshold;
+							}
+							else if(DisplayModeNo==1)
+							{
+								LO =Threshold;
+							}
+						}
 						SelftStudyflag = 0;
 						WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
 						WriteFlash(S_SET_FLASH_DATA_ADDRESS,S_SET);
@@ -488,6 +500,7 @@ void PG120_Function(void)
 				if(KEY==ULOC)/*判断按键是否上锁*/
 				{
 				/*SET自学习模式*/
+				if((DisplayModeNo==0&&displayModeONE_FLAG==0)||(DisplayModeNo<=1&&displayModeONE_FLAG==1))
 					selfstudy();
 				/*Mode菜单模式*/
 					menu();
@@ -515,7 +528,6 @@ uint8_t CheckDust(void)
 *显示模式切换
 *
 *******************************/
-uint8_t DisplayModeNo=0;
 
 void DisplayMODE(void)
 {
@@ -612,12 +624,27 @@ void DisplayMODE(void)
 *显示模式1
 *
 *******************************/
+int8_t LastDSC;
 void DisplayModeONE(void)
 {
 	if(displayModeONE_FLAG)
+	{
+		if(DSC)
+		{
+			LastDSC = DSC;
+			DSC = 0;  //区域模式下，DX一直为0
+		}
 		DisplayModeONE_AREA();
+	}
 	else
+	{
+		if(LastDSC)
+		{
+			LastDSC = 0;
+			DSC = 1;
+		}
 		DisplayModeONE_STD();
+	}
 }
 
 
@@ -1119,7 +1146,7 @@ void SetRegisterA(uint32_t ADCTestValue)
 	{
 				if(ADCTestValue>=Threshold+TX)  //20171231
 					RegisterA = 1;
-				else if(ADCTestValue<=(Threshold-TX-120-Threshold/128))/*20171223*/
+				else if(ADCTestValue<=(Threshold-TX-80-Threshold/128))/*20171223*/ //2018-1-5 修改成-80
 					RegisterA = 0;
 	}
 }
@@ -1434,7 +1461,7 @@ void ResetParameter(void)
 		LO = 700 ;
 		displayModeONE_FLAG = 0;
 		PERCENTAGE = 1;
-		DSC = 1;
+		DSC = 0;
 		
 		WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
 		Test_Delay(50); 

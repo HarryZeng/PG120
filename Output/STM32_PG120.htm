@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\Output\STM32_PG120.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\Output\STM32_PG120.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Jan 05 07:53:54 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Jan 05 15:43:12 2018
 <BR><P>
 <H3>Maximum Stack Usage =         96 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1835,7 +1835,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[18]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 </UL>
 
-<P><STRONG><a name="[18]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 780 bytes, Stack size 32 bytes, pg120.o(.text))
+<P><STRONG><a name="[18]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 822 bytes, Stack size 32 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
@@ -1881,7 +1881,7 @@ Global Symbols
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ResetParameter
 </UL>
 
-<P><STRONG><a name="[bf]"></a>ResetParameter</STRONG> (Thumb, 562 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[bf]"></a>ResetParameter</STRONG> (Thumb, 556 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = ResetParameter &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
@@ -1913,7 +1913,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeFour
 </UL>
 
-<P><STRONG><a name="[dd]"></a>DisplayModeFour</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[dd]"></a>DisplayModeFour</STRONG> (Thumb, 116 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = DisplayModeFour &rArr; DEL_Set &rArr; SMG_DisplayMenuTwo_DEL_SET
 </UL>
 <BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DEL_Set
@@ -1929,7 +1929,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayMODE
 </UL>
 
-<P><STRONG><a name="[df]"></a>DisplayModeTWO</STRONG> (Thumb, 242 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[df]"></a>DisplayModeTWO</STRONG> (Thumb, 136 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = DisplayModeTWO &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
@@ -1947,7 +1947,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE
 </UL>
 
-<P><STRONG><a name="[e2]"></a>DisplayModeONE_AREA</STRONG> (Thumb, 1540 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[e2]"></a>DisplayModeONE_AREA</STRONG> (Thumb, 1538 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = DisplayModeONE_AREA &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
@@ -1957,7 +1957,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE
 </UL>
 
-<P><STRONG><a name="[e3]"></a>DisplayModeONE</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[e3]"></a>DisplayModeONE</STRONG> (Thumb, 60 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = DisplayModeONE &rArr; DisplayModeONE_AREA &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE_AREA
@@ -1988,7 +1988,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PG120_Function
 </UL>
 
-<P><STRONG><a name="[e6]"></a>GetEEPROM</STRONG> (Thumb, 158 bytes, Stack size 8 bytes, pg120.o(.text))
+<P><STRONG><a name="[e6]"></a>GetEEPROM</STRONG> (Thumb, 338 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = GetEEPROM &rArr; ReadFlash
 </UL>
 <BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadFlash
@@ -1996,7 +1996,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PG120_Function
 </UL>
 
-<P><STRONG><a name="[ca]"></a>PG120_Function</STRONG> (Thumb, 306 bytes, Stack size 0 bytes, pg120.o(.text))
+<P><STRONG><a name="[ca]"></a>PG120_Function</STRONG> (Thumb, 158 bytes, Stack size 0 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = PG120_Function &rArr; DisplayMODE &rArr; DisplayModeONE &rArr; DisplayModeONE_AREA &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfstudy
