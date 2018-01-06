@@ -27,7 +27,7 @@ void InitInternalFlash(uint32_t addr)
 	FLASH_Lock(); //锁定FLASH编程擦除控制器
 }
 
-void WriteInternalFlash(uint32_t addr,uint32_t data)
+FLASH_Status WriteInternalFlash(uint32_t addr,uint32_t data)
 {
 	FLASH_Unlock(); //解锁FLASH编程擦除控制器
 	FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|FLASH_FLAG_PGERR|FLASH_FLAG_WRPRTERR);//清除标志位
@@ -75,12 +75,13 @@ void WriteFlash(uint32_t addr,uint32_t data)
 			tempflashdata = *(__IO uint32_t*)(addr);
 		}
 		WriteInternalFlash(addr,data);
+		
 }
 
 /******************************************
 读FLASH
 *******************************************/
-uint32_t tempflashdata;
+//uint32_t tempflashdata;
 uint32_t  ReadFlash(uint32_t addr)
 {	
 		uint32_t HeadAddr = addr;

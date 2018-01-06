@@ -338,12 +338,12 @@ void DMA1_Channel1_IRQHandler(void)
 				ClearData(SX,4);/*清零*/
 			
 				/*TX*/
-				GetSum(&TX_Signal[TX_Index++],&S_Final,1);/*八次总和,TX*/
-				if(TX_Index>=8)
+				GetSum(&TX_Signal[TX_Index++],&S_Final,1);/*六次总和,TX*///20180106
+				if(TX_Index>=6)
 				{
 					TX_Index = 0;
-					DeleteMaxAndMinGetAverage(TX_Signal,8,&TX_Max,&TX_Min);
-					TX = (TX_Max-TX_Min)*2;/*求得TX*/
+					DeleteMaxAndMinGetAverage(TX_Signal,6,&TX_Max,&TX_Min);
+					TX = (TX_Max-TX_Min);/*求得TX*/
 					//TX = 0;
 					ClearData(TX_Signal,8);/*清零*/
 				}
@@ -1139,7 +1139,7 @@ void SetRegisterA(uint32_t ADCTestValue)
 	{
 		if(ADCTestValue>=LO+TX && ADCTestValue<=HI-TX-80-HI/128)
 			RegisterA = 1;
-		else if(((ADCTestValue>=(HI+TX))&&(ADCTestValue<=9999))||(ADCTestValue<=(LO-TX-LO/128)))							 /*20171231*/
+		else if(((ADCTestValue>=(HI+TX))&&(ADCTestValue<=9999))||(ADCTestValue<=(LO-TX-80-LO/128)))	//20180106
 			RegisterA = 0;
 		
 		/*RegisterC*/
@@ -1152,7 +1152,7 @@ void SetRegisterA(uint32_t ADCTestValue)
 	{
 				if(ADCTestValue>=Threshold+TX)  //20171231
 					RegisterA = 1;
-				else if(ADCTestValue<=(Threshold-TX-80-Threshold/128))/*20171223*/ //2018-1-5 修改成-80
+				else if(ADCTestValue<=(Threshold-TX-40-Threshold/256))/*20171223*/ //2018-1-5 修改成-80,//20180106 改成-40 /256
 					RegisterA = 0;
 	}
 }
@@ -1346,13 +1346,13 @@ void ButtonMapping(void)
 
 	}
 	/*软件初始化*/
-	else if(ModeButton.Effect==PressLong &&UpButton.Effect ==PressLong && UpButton.Status ==Press &&DownButton.Effect ==PressLong && DownButton.Status ==Press)
+	else if(ModeButton.Effect==PressLong &&SetButton.Effect ==PressLong && SetButton.Status ==Press &&UpButton.Status ==Release && DownButton.Status ==Release)
 	{
 		takeoffLED();
-		while((ReadButtonStatus(&ModeButton)) == Press && (ReadButtonStatus(&UpButton) == Press) && (ReadButtonStatus(&DownButton) == Press))
+		while((ReadButtonStatus(&ModeButton)) == Press && (ReadButtonStatus(&SetButton) == Press))
 		{
 			EraseFlash();			
-			while((ReadButtonStatus(&ModeButton)) == Press && (ReadButtonStatus(&UpButton) == Press) && (ReadButtonStatus(&DownButton) == Press))
+			while((ReadButtonStatus(&ModeButton)) == Press && (ReadButtonStatus(&SetButton) == Press))
 					ButtonMappingDisplay(2);
 		}
 	

@@ -147,9 +147,8 @@ void menu(void)
 						{
 							ModeButton.PressCounter = 0;
 							ModeButton.Status = Release;
-							
-							WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
-							WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+//							WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+//							WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
 							break;
 						}
 				}
@@ -275,7 +274,7 @@ void Menu_PERCENTAGE(void)
 	static uint8_t lastCounter;
 	uint8_t Flashflag=0;
 	
-	SMG_DisplayPERCENTAGE(PERCENTAGE); //显示
+	
 	
 	/*Up Button*/
 	if(UpButton.PressCounter !=lastCounter && UpButton.Effect==PressShort)
@@ -368,11 +367,11 @@ void Menu_PERCENTAGE(void)
 			PERCENTAGE =0;
 	else if(PERCENTAGE>=50)
 			PERCENTAGE =50;
-	
+	SMG_DisplayPERCENTAGE(PERCENTAGE); //显示
 		if(EventFlag&Blink500msFlag && Flashflag==1) 
 		{
-			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
 			WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
+			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
 		}
 }
 
