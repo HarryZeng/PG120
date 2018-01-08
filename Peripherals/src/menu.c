@@ -64,22 +64,32 @@ void menu(void)
 				S1024 = 0;
 				ModeButton.PressCounter = 0;
 				UpButton.PressCounter = 0;
+				/*ATT100C菜单*/
 				MenuOne_ATT100();   
 				while(ModeButton.PressCounter==1)
 				{
 					MenuOne_ATT100();
 				}	
+				if(ModeButton.PressCounter==2)
+					WriteFlash(ATT100_FLASH_DATA_ADDRESS,ATT100);
 				
+				/*百分比菜单*/
 				while(ModeButton.PressCounter==2)
 				{
 					Menu_PERCENTAGE();
 				}
+				if(ModeButton.PressCounter==3)
+					WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
 				
+				/*DSC菜单*/
 				while(ModeButton.PressCounter==3)
 				{
 					Menu_DSC();
 				}
+				if(ModeButton.PressCounter==4)
+					WriteFlash(DSC_FLASH_DATA_ADDRESS,DSC);
 				
+				/*DETECT菜单*/
 				while(ModeButton.PressCounter==4)
 				{
 					/*DETECT*//*数码管显示*/
@@ -94,7 +104,7 @@ void menu(void)
 							displayModeONE_FLAG = 1;
 						else 
 							displayModeONE_FLAG=0;
-						WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+						//WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
 					}
 
 					/*Down Button*/
@@ -105,22 +115,29 @@ void menu(void)
 							displayModeONE_FLAG = 1;
 						else 
 							displayModeONE_FLAG=0;
-						WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+						//WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
 					}
 				}
+				if(ModeButton.PressCounter==5)
+					WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
 				
-				
+				/*SV COUNTER设定菜单*/
 				while(ModeButton.PressCounter==5)
 				{
 					/*SV COUNTER设定菜单*/
 					MenuOne_SV();
 				}
-				
+				if(ModeButton.PressCounter==6)
+						WriteFlash(SV_FLASH_DATA_ADDRESS,SV);
+					
 				while(ModeButton.PressCounter==6)
 				{
 					/*FSV COUNTER设定菜单*/
 					MenuOne_FSV();
 				}
+				if(ModeButton.PressCounter==7)
+					WriteFlash(FSV_FLASH_DATA_ADDRESS,FSV);
+				
 				
 				/*显示先前定时器选定菜单*/
 				if(ModeButton.PressCounter==7 && ModeButton.Effect==PressShort)
@@ -138,6 +155,12 @@ void menu(void)
 				{
 						MenuTwo_OUT1_DelaySET();
 				}
+				if(ModeButton.PressCounter==9)
+				{
+					WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+					WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+				}
+				
 				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==9)
 				{
 						END_Display();
@@ -258,11 +281,11 @@ void MenuOne_ATT100(void)
 	else if(ATT100>=100)
 			ATT100 =100;
 	
-		if(EventFlag&Blink500msFlag && Flashflag==1) 
-		{
-			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-			WriteFlash(ATT100_FLASH_DATA_ADDRESS,ATT100);
-		}
+//		if(EventFlag&Blink500msFlag && Flashflag==1) 
+//		{
+//			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+//			WriteFlash(ATT100_FLASH_DATA_ADDRESS,ATT100);
+//		}
 		
 		ATTSet(ATT100);/*设置ATT的输出*/
 	
@@ -368,11 +391,11 @@ void Menu_PERCENTAGE(void)
 	else if(PERCENTAGE>=50)
 			PERCENTAGE =50;
 	SMG_DisplayPERCENTAGE(PERCENTAGE); //显示
-		if(EventFlag&Blink500msFlag && Flashflag==1) 
-		{
-			WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
-			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-		}
+//		if(EventFlag&Blink500msFlag && Flashflag==1) 
+//		{
+//			WriteFlash(PERCENTAGE_FLASH_DATA_ADDRESS,PERCENTAGE);
+//			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+//		}
 }
 
 /*******************************
@@ -395,7 +418,7 @@ void Menu_DSC(void)
 				DSC = 1;
 			else 
 				DSC=0;
-			WriteFlash(DSC_FLASH_DATA_ADDRESS,DSC);
+			//WriteFlash(DSC_FLASH_DATA_ADDRESS,DSC);
 		}
 
 		/*Down Button*/
@@ -406,7 +429,7 @@ void Menu_DSC(void)
 				DSC = 1;
 			else 
 				DSC=0;
-			WriteFlash(DSC_FLASH_DATA_ADDRESS,DSC);
+			//WriteFlash(DSC_FLASH_DATA_ADDRESS,DSC);
 		}
 }
 
@@ -511,11 +534,11 @@ void MenuOne_SV(void)
 	else if(SV>=65535)
 			SV =65535;
 	
-		if(EventFlag&Blink500msFlag && Flashflag==1) 
-		{
-			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-			WriteFlash(SV_FLASH_DATA_ADDRESS,SV);
-		}
+//		if(EventFlag&Blink500msFlag && Flashflag==1) 
+//		{
+//			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+//			WriteFlash(SV_FLASH_DATA_ADDRESS,SV);
+//		}
 }
 
 
@@ -618,11 +641,11 @@ void MenuOne_FSV(void)
 	else if(FSV>=65535)
 			FSV =65535;
 	
-		if(EventFlag&Blink500msFlag && Flashflag==1) 
-		{
-			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-			WriteFlash(FSV_FLASH_DATA_ADDRESS,FSV);
-		}
+//		if(EventFlag&Blink500msFlag && Flashflag==1) 
+//		{
+//			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+//			WriteFlash(FSV_FLASH_DATA_ADDRESS,FSV);
+//		}
 	
 }
 
@@ -891,13 +914,13 @@ void MenuTwo_OUT1_OFFD(void)
 			else if(OUT1_Mode.DelayValue<=0)
 					OUT1_Mode.DelayValue = 0;
 			
-			if(EventFlag&Blink500msFlag && Flashflag==1) 
-			{
-				Flashflag = 0;
-				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
-				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
-			}
+//			if(EventFlag&Blink500msFlag && Flashflag==1) 
+//			{
+//				Flashflag = 0;
+//				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+//				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+//				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+//			}
 			
 		}
 }
@@ -1027,13 +1050,13 @@ void MenuTwo_OUT1_ON_D(void)
 				OUT1_Mode.DelayValue = 9999;
 			else if(OUT1_Mode.DelayValue<=0)
 					OUT1_Mode.DelayValue = 0;
-			if(EventFlag&Blink500msFlag && Flashflag==1) 
-			{
-				Flashflag = 0;
-				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
-				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
-			}
+//			if(EventFlag&Blink500msFlag && Flashflag==1) 
+//			{
+//				Flashflag = 0;
+//				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+//				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+//				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+//			}
 		}
 }
 
@@ -1163,13 +1186,13 @@ void MenuTwo_OUT1_SHOT(void)
 				OUT1_Mode.DelayValue = 9999;
 			else if(OUT1_Mode.DelayValue<=0)
 					OUT1_Mode.DelayValue = 0;
-			if(EventFlag&Blink500msFlag && Flashflag==1) 
-			{
-				Flashflag = 0;
-				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
-				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
-			}
+//			if(EventFlag&Blink500msFlag && Flashflag==1) 
+//			{
+//				Flashflag = 0;
+//				EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
+//				WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+//				WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+//			}
 		}
 }
 

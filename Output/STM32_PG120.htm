@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\Output\STM32_PG120.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\Output\STM32_PG120.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Jan 08 15:57:31 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Jan 08 17:42:13 2018
 <BR><P>
 <H3>Maximum Stack Usage =         96 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -999,7 +999,7 @@ Global Symbols
 <P><STRONG><a name="[1ac]"></a>TIM_SetCompare1</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f10x_tim.o(.text), UNUSED)
 
 <P><STRONG><a name="[ab]"></a>TIM_SetCompare2</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f10x_tim.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ATTSet
+<BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ATTSet
 </UL>
 
 <P><STRONG><a name="[1ad]"></a>TIM_SetCompare3</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f10x_tim.o(.text), UNUSED)
@@ -1324,7 +1324,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[a1]"></a>SMG_DisplayModeDETECT</STRONG> (Thumb, 92 bytes, Stack size 0 bytes, display.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+<BR><BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
 </UL>
 
 <P><STRONG><a name="[7a]"></a>SMG_DisplaSV</STRONG> (Thumb, 232 bytes, Stack size 8 bytes, display.o(.text))
@@ -1332,7 +1332,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetIntNumber
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_SV
+<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_SV
 </UL>
 
 <P><STRONG><a name="[7b]"></a>SMG_DisplayFSV</STRONG> (Thumb, 238 bytes, Stack size 8 bytes, display.o(.text))
@@ -1340,15 +1340,15 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetIntNumber
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_FSV
+<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_FSV
 </UL>
 
-<P><STRONG><a name="[97]"></a>SMG_DisplayMenuTwo_TOFF</STRONG> (Thumb, 118 bytes, Stack size 0 bytes, display.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_TOFF
+<P><STRONG><a name="[96]"></a>SMG_DisplayMenuTwo_TOFF</STRONG> (Thumb, 118 bytes, Stack size 0 bytes, display.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_TOFF
 </UL>
 
-<P><STRONG><a name="[95]"></a>SMG_DisplayMenuTwo_OFFD</STRONG> (Thumb, 116 bytes, Stack size 0 bytes, display.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_OFFD
+<P><STRONG><a name="[94]"></a>SMG_DisplayMenuTwo_OFFD</STRONG> (Thumb, 116 bytes, Stack size 0 bytes, display.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_OFFD
 </UL>
 
 <P><STRONG><a name="[7c]"></a>SMG_DisplayMenuTwo_OFFD_SET</STRONG> (Thumb, 402 bytes, Stack size 12 bytes, display.o(.text))
@@ -1356,11 +1356,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetIntNumber
 </UL>
-<BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_OFFD
+<BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_OFFD
 </UL>
 
-<P><STRONG><a name="[93]"></a>SMG_DisplayMenuTwo_ON_Delay</STRONG> (Thumb, 120 bytes, Stack size 0 bytes, display.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_ON_D
+<P><STRONG><a name="[92]"></a>SMG_DisplayMenuTwo_ON_Delay</STRONG> (Thumb, 120 bytes, Stack size 0 bytes, display.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_ON_D
 </UL>
 
 <P><STRONG><a name="[7d]"></a>SMG_DisplayMenuTwo_ON_Delay_SET</STRONG> (Thumb, 436 bytes, Stack size 12 bytes, display.o(.text))
@@ -1368,7 +1368,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetIntNumber
 </UL>
-<BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_ON_D
+<BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_ON_D
 </UL>
 
 <P><STRONG><a name="[90]"></a>SMG_DisplayMenuTwo_SHOT</STRONG> (Thumb, 122 bytes, Stack size 0 bytes, display.o(.text))
@@ -1414,7 +1414,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[a2]"></a>END_Display</STRONG> (Thumb, 114 bytes, Stack size 0 bytes, display.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+<BR><BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
 </UL>
 
 <P><STRONG><a name="[1dd]"></a>Dust_Display</STRONG> (Thumb, 66 bytes, Stack size 0 bytes, display.o(.text), UNUSED)
@@ -1426,7 +1426,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetIntNumber
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_ATT100
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_ATT100
 </UL>
 
 <P><STRONG><a name="[85]"></a>SMG_DisplayPERCENTAGE</STRONG> (Thumb, 148 bytes, Stack size 8 bytes, display.o(.text))
@@ -1434,11 +1434,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetIntNumber
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_PERCENTAGE
+<BR>[Called By]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_PERCENTAGE
 </UL>
 
-<P><STRONG><a name="[9c]"></a>SMG_DisplayMenuDSC</STRONG> (Thumb, 98 bytes, Stack size 0 bytes, display.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_DSC
+<P><STRONG><a name="[9b]"></a>SMG_DisplayMenuDSC</STRONG> (Thumb, 98 bytes, Stack size 0 bytes, display.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_DSC
 </UL>
 
 <P><STRONG><a name="[1df]"></a>SMG_Init</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, display.o(.text), UNUSED)
@@ -1494,111 +1494,103 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM3_IRQHandler
 </UL>
 
-<P><STRONG><a name="[8f]"></a>MenuTwo_OUT1_SHOT</STRONG> (Thumb, 688 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = MenuTwo_OUT1_SHOT &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
+<P><STRONG><a name="[8f]"></a>MenuTwo_OUT1_SHOT</STRONG> (Thumb, 638 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = MenuTwo_OUT1_SHOT &rArr; SMG_DisplayMenuTwo_SHOT_SET
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_SHOT_SET
+<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_SHOT_SET
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_SHOT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
+<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
 </UL>
 
-<P><STRONG><a name="[92]"></a>MenuTwo_OUT1_ON_D</STRONG> (Thumb, 728 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = MenuTwo_OUT1_ON_D &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
+<P><STRONG><a name="[91]"></a>MenuTwo_OUT1_ON_D</STRONG> (Thumb, 672 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = MenuTwo_OUT1_ON_D &rArr; SMG_DisplayMenuTwo_ON_Delay_SET
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_ON_Delay_SET
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_ON_Delay
+<BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_ON_Delay_SET
+<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_ON_Delay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
-</UL>
-
-<P><STRONG><a name="[94]"></a>MenuTwo_OUT1_OFFD</STRONG> (Thumb, 730 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = MenuTwo_OUT1_OFFD &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
-</UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_OFFD_SET
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_OFFD
-</UL>
-<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
+<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
 </UL>
 
-<P><STRONG><a name="[96]"></a>MenuTwo_OUT1_TOFF</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[93]"></a>MenuTwo_OUT1_OFFD</STRONG> (Thumb, 638 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = MenuTwo_OUT1_OFFD &rArr; SMG_DisplayMenuTwo_OFFD_SET
+</UL>
+<BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_OFFD_SET
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_OFFD
+</UL>
+<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
+</UL>
+
+<P><STRONG><a name="[95]"></a>MenuTwo_OUT1_TOFF</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = MenuTwo_OUT1_TOFF
 </UL>
-<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_TOFF
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuTwo_TOFF
 </UL>
-<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
+<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
 </UL>
 
-<P><STRONG><a name="[98]"></a>MenuTwo_OUT1_DelaySET</STRONG> (Thumb, 562 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = MenuTwo_OUT1_DelaySET &rArr; MenuTwo_OUT1_OFFD &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
+<P><STRONG><a name="[97]"></a>MenuTwo_OUT1_DelaySET</STRONG> (Thumb, 600 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = MenuTwo_OUT1_DelaySET &rArr; MenuTwo_OUT1_OFFD &rArr; SMG_DisplayMenuTwo_OFFD_SET
 </UL>
-<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_TOFF
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_OFFD
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_ON_D
+<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_TOFF
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_OFFD
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_ON_D
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_SHOT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
 </UL>
 
-<P><STRONG><a name="[99]"></a>MenuOne_FSV</STRONG> (Thumb, 588 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = MenuOne_FSV &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
+<P><STRONG><a name="[98]"></a>MenuOne_FSV</STRONG> (Thumb, 502 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = MenuOne_FSV &rArr; SMG_DisplayFSV
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayFSV
+<BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayFSV
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
-</UL>
-
-<P><STRONG><a name="[9a]"></a>MenuOne_SV</STRONG> (Thumb, 538 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = MenuOne_SV &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
-</UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplaSV
-</UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
 </UL>
 
-<P><STRONG><a name="[9b]"></a>Menu_DSC</STRONG> (Thumb, 142 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Menu_DSC &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
+<P><STRONG><a name="[99]"></a>MenuOne_SV</STRONG> (Thumb, 544 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = MenuOne_SV &rArr; SMG_DisplaSV
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuDSC
+<BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplaSV
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
-</UL>
-
-<P><STRONG><a name="[9d]"></a>Menu_PERCENTAGE</STRONG> (Thumb, 616 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Menu_PERCENTAGE &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
-</UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayPERCENTAGE
-</UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
 </UL>
 
-<P><STRONG><a name="[9e]"></a>MenuOne_ATT100</STRONG> (Thumb, 616 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = MenuOne_ATT100 &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
+<P><STRONG><a name="[9a]"></a>Menu_DSC</STRONG> (Thumb, 118 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Menu_DSC
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ATTSet
+<BR>[Calls]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayMenuDSC
+</UL>
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+</UL>
+
+<P><STRONG><a name="[9c]"></a>Menu_PERCENTAGE</STRONG> (Thumb, 556 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = Menu_PERCENTAGE &rArr; SMG_DisplayPERCENTAGE
+</UL>
+<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayPERCENTAGE
+</UL>
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+</UL>
+
+<P><STRONG><a name="[9d]"></a>MenuOne_ATT100</STRONG> (Thumb, 534 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = MenuOne_ATT100 &rArr; ATTSet
+</UL>
+<BR>[Calls]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ATTSet
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayATT100
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
 </UL>
 
-<P><STRONG><a name="[a0]"></a>menu</STRONG> (Thumb, 470 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = menu &rArr; MenuTwo_OUT1_DelaySET &rArr; MenuTwo_OUT1_OFFD &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
+<P><STRONG><a name="[9f]"></a>menu</STRONG> (Thumb, 694 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = menu &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_ATT100
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_PERCENTAGE
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_DSC
-<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_SV
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_FSV
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_ATT100
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_PERCENTAGE
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_DSC
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_SV
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_FSV
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_DelaySET
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;END_Display
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayModeDETECT
 </UL>
@@ -1614,7 +1606,7 @@ Global Symbols
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_Unlock
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EraseFlash
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 </UL>
 
 <P><STRONG><a name="[a7]"></a>WriteInternalFlash</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, flash.o(.text))
@@ -1625,7 +1617,7 @@ Global Symbols
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_Lock
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_Unlock
 </UL>
-<BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 </UL>
 
 <P><STRONG><a name="[a8]"></a>EraseFlash</STRONG> (Thumb, 88 bytes, Stack size 8 bytes, flash.o(.text))
@@ -1636,21 +1628,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ButtonMapping
 </UL>
 
-<P><STRONG><a name="[91]"></a>WriteFlash</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, flash.o(.text))
+<P><STRONG><a name="[a0]"></a>WriteFlash</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, flash.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteInternalFlash
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitInternalFlash
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_ATT100
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_PERCENTAGE
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Menu_DSC
-<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_SV
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_FSV
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_OFFD
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_ON_D
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuTwo_OUT1_SHOT
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayMODE
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE_AREA
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE_STD
@@ -1683,12 +1667,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PG120_Function
 </UL>
 
-<P><STRONG><a name="[9f]"></a>ATTSet</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, selfstudy.o(.text))
+<P><STRONG><a name="[9e]"></a>ATTSet</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, selfstudy.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ATTSet
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SetCompare2
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_ATT100
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MenuOne_ATT100
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PG120_Function
 </UL>
 
@@ -1758,7 +1742,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = ProgramCheck &rArr; ResetParameter &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadFlash
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ResetParameter
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelaymsSet
 </UL>
@@ -1847,7 +1831,7 @@ Global Symbols
 <P><STRONG><a name="[18]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 892 bytes, Stack size 32 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_ClearITPendingBit
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_GetITStatus
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_GetCounter
@@ -1893,7 +1877,7 @@ Global Symbols
 <P><STRONG><a name="[c0]"></a>ResetParameter</STRONG> (Thumb, 550 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = ResetParameter &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 <LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test_Delay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ButtonMapping
@@ -1904,7 +1888,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = ButtonMapping &rArr; ResetParameter &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EraseFlash
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadButtonStatus
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;takeoffLED
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ButtonMappingDisplay
@@ -1941,7 +1925,7 @@ Global Symbols
 <P><STRONG><a name="[df]"></a>DisplayModeTWO</STRONG> (Thumb, 136 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = DisplayModeTWO &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayModeTWO
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayMODE
@@ -1950,7 +1934,7 @@ Global Symbols
 <P><STRONG><a name="[e1]"></a>DisplayModeONE_STD</STRONG> (Thumb, 586 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = DisplayModeONE_STD &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayModeONE
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE
@@ -1959,7 +1943,7 @@ Global Symbols
 <P><STRONG><a name="[e2]"></a>DisplayModeONE_AREA</STRONG> (Thumb, 1548 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = DisplayModeONE_AREA &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayModeONE_Detect_AREA_LO
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SMG_DisplayModeONE_Detect_AREA_HI
 </UL>
@@ -1978,7 +1962,7 @@ Global Symbols
 <P><STRONG><a name="[e4]"></a>DisplayMODE</STRONG> (Thumb, 564 bytes, Stack size 8 bytes, pg120.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = DisplayMODE &rArr; DisplayModeONE &rArr; DisplayModeONE_AREA &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteFlash
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ButtonMappingDisplay
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeONE
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayModeTWO
@@ -2006,10 +1990,10 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[cb]"></a>PG120_Function</STRONG> (Thumb, 158 bytes, Stack size 0 bytes, pg120.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = PG120_Function &rArr; menu &rArr; MenuTwo_OUT1_DelaySET &rArr; MenuTwo_OUT1_OFFD &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = PG120_Function &rArr; DisplayMODE &rArr; DisplayModeONE &rArr; DisplayModeONE_AREA &rArr; WriteFlash &rArr; WriteInternalFlash &rArr; FLASH_ProgramWord &rArr; FLASH_WaitForLastOperation
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ATTSet
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
+<BR>[Calls]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ATTSet
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_WriteBit
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetEEPROM
 <LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ShortCircuitProtection
