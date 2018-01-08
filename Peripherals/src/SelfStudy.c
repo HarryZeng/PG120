@@ -34,6 +34,8 @@ uint32_t  SET1ADC_Value=0;
 
 extern int16_t adc_dma_tab[4];
 extern  uint8_t DX_Flag;
+extern int16_t 	DX;
+extern uint32_t S1024;
 void selfstudy(void)
 {
 	uint8_t OUT1_STATUS,OUT2_STATUS,OUT3_STATUS;
@@ -309,7 +311,8 @@ uint8_t  ATTcalibration(void)
 			/*等待DMA对ADC采样才完成*/
 		while(SelftStudyflag)
 		{
-			
+			DX = 0;
+			S1024 = 0;
 		}
 		return 0;
 }

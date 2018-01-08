@@ -378,7 +378,7 @@ void DMA1_Channel1_IRQHandler(void)
 						S1024 = 0;
 						//GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
 						//Threshold = S_SET-80;   /*更新阀值*/
-						S_SET = S_Final;
+						S_SET = SX_Final[SX_Index];
 						
 						if(displayModeONE_FLAG)//区域模式
 						{

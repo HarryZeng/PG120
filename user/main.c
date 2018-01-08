@@ -236,7 +236,7 @@ int main(void)
 }
 
 /*************************************************************/
-#define 	FLASH_START_ADDR1 	 						0x08008000
+#define 	FLASH_START_ADDR1 	 						0x0800FFF0
 
 uint8_t* UID=(uint8_t*)0x1FFFF7E8;  //获取UID  stm32f0:0x1FFFF7AC,stm32f100:0x1FFFF7E8
 uint32_t Fml_Constant 	= 0x19101943;//输入到公式的常熟
@@ -281,6 +281,7 @@ uint8_t FlashCheck(void)
 		
 		return FlashFlag;
 }
+
 uint16_t Formula_CRC16(uint8_t *p,uint8_t len)
 {
 	uint8_t i;
