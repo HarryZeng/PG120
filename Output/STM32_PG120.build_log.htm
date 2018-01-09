@@ -27,14 +27,49 @@ Project File Date:  01/08/2018
 <h2>Output:</h2>
 *** Using Compiler 'V5.05 update 1 (build 106)', folder: 'd:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'STM32_USART'
-"..\Output\STM32_PG120.axf" - 0 Error(s), 0 Warning(s).
+compiling PG120.c...
+..\Peripherals\src\PG120.c(308): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  		GetSum(&SX[S_Index++],S,4);/*四个通道总和*/
+..\Peripherals\src\PG120.c(308): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  		GetSum(&SX[S_Index++],S,4);/*四个通道总和*/
+..\Peripherals\src\PG120.c(315): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  				tempdata = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min);
+..\Peripherals\src\PG120.c(338): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  				ClearData(SX,4);/*清零*/
+..\Peripherals\src\PG120.c(341): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  				GetSum(&TX_Signal[TX_Index++],&S_Final,1);/*六次总和,TX*///20180106
+..\Peripherals\src\PG120.c(341): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  				GetSum(&TX_Signal[TX_Index++],&S_Final,1);/*六次总和,TX*///20180106
+..\Peripherals\src\PG120.c(345): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  					DeleteMaxAndMinGetAverage(TX_Signal,6,&TX_Max,&TX_Min);
+..\Peripherals\src\PG120.c(348): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  					ClearData(TX_Signal,8);/*清零*/
+..\Peripherals\src\PG120.c(352): warning:  #167-D: argument of type "int32_t *" is incompatible with parameter of type "uint32_t *"
+  				GetSum(&DisplayADCValue_Sum,&S_Final,1);
+..\Peripherals\src\PG120.c(294): warning:  #177-D: variable "Dispaly_Max" was declared but never referenced
+  	uint32_t 	Dispaly_Max=0;
+..\Peripherals\src\PG120.c(295): warning:  #177-D: variable "Dispaly_Min" was declared but never referenced
+  	uint32_t 	Dispaly_Min=0;
+..\Peripherals\src\PG120.c(458): warning:  #177-D: variable "Dispaly_Max" was declared but never referenced
+  		uint32_t 	Dispaly_Max=0;
+..\Peripherals\src\PG120.c(459): warning:  #177-D: variable "Dispaly_Min" was declared but never referenced
+  		uint32_t 	Dispaly_Min=0;
+..\Peripherals\src\PG120.c(1435): warning:  #188-D: enumerated type mixed with another type
+  			OUT1_Mode.DelayMode 	= ReadFlash(OUT1_Mode_FLASH_DATA_ADDRESS);
+..\Peripherals\src\PG120.c(1440): warning:  #188-D: enumerated type mixed with another type
+  			KEY 									= ReadFlash(KEY_FLASH_DATA_ADDRESS);
+..\Peripherals\src\PG120.c: 15 warnings, 0 errors
+linking...
+Program Size: Code=35462 RO-data=366 RW-data=420 ZI-data=3220  
+FromELF: creating hex file...
+"..\Output\STM32_PG120.axf" - 0 Error(s), 15 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   D:\ZHR\PersonalData\Project\code\Code\PG120\user\RTE
   d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

@@ -1455,6 +1455,7 @@ void GetEEPROM(void)
 ****************************/
 void ResetParameter(void)
 {
+		FSV = 1000;
 		SV = 900;
 		Threshold = 1000;
 		KEY = ULOC;
