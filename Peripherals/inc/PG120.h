@@ -48,9 +48,9 @@
 #define BUTTON_SET_GPIO_Port 			GPIOB
 #define BUTTON_MODE_Pin 					GPIO_Pin_13
 #define BUTTON_MODE_GPIO_Port 		GPIOB
-#define BUTTON_DOWN_Pin 					GPIO_Pin_10
+#define BUTTON_DOWN_Pin 					GPIO_Pin_14
 #define BUTTON_DOWN_GPIO_Port 		GPIOB
-#define BUTTON_UP_Pin 						GPIO_Pin_14
+#define BUTTON_UP_Pin 						GPIO_Pin_10
 #define BUTTON_UP_GPIO_Port 			GPIOB
 
 #define OUT1_Pin 									GPIO_Pin_15

@@ -313,7 +313,7 @@ void DMA1_Channel1_IRQHandler(void)
 				S_Index = 0;
 				/*SX,FX*/
 				tempdata = DeleteMaxAndMinGetAverage(SX,4,&SX_Max,&SX_Min);
-				SX_Final[SX_Index] = tempdata - 3000;/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*/
+				SX_Final[SX_Index] = tempdata - 5000;/*求得并去掉最大最小值，求剩下数据的平均值,需要求32组*///2018-5-1  -5000
 				/*数据限位*/
 				if(SX_Final[SX_Index]>=9999) 
 					SX_Final[SX_Index] = 9999;
@@ -343,7 +343,7 @@ void DMA1_Channel1_IRQHandler(void)
 				{
 					TX_Index = 0;
 					DeleteMaxAndMinGetAverage(TX_Signal,6,&TX_Max,&TX_Min);
-					TX = (TX_Max-TX_Min);/*求得TX*/
+					TX = (TX_Max-TX_Min) *0.125;/*求得TX--->0.125TX*/  
 					//TX = 0;
 					ClearData(TX_Signal,8);/*清零*/
 				}
@@ -1150,9 +1150,9 @@ void SetRegisterA(uint32_t ADCTestValue)
 	}	
 	else  /*STD Mode*/
 	{
-				if(ADCTestValue>=Threshold+TX)  //20171231
+				if(ADCTestValue>=Threshold+TX)  //20171231  2018-5-1
 					RegisterA = 1;
-				else if(ADCTestValue<=(Threshold-TX-40-Threshold/256))/*20171223*/ //2018-1-5 修改成-80,//20180106 改成-40 /256
+				else if(ADCTestValue<=(Threshold-TX-20-Threshold/512))/*20171223*/ //2018-1-5 修改成-80,//20180106 改成-40 /256 2018-5-1 ->-20  /512
 					RegisterA = 0;
 	}
 }
